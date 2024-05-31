@@ -1,3 +1,4 @@
+import { Avatar } from "@nextui-org/avatar";
 import { Link } from "@nextui-org/link";
 import {
   NavbarBrand,
@@ -46,8 +47,14 @@ export const Navbar = () => {
         </div>
       </NavbarContent>
 
-      <NavbarContent className="pl-4" justify="end">
+      <NavbarContent className="pl-20" justify="end">
         <ThemeSwitch />
+        <Avatar
+          isBordered
+          radius="md"
+          size="sm"
+          src="https://i.pravatar.cc/150?u=a04258114e29026302d"
+        />
       </NavbarContent>
 
       <NavbarMenu>
