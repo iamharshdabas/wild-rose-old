@@ -12,6 +12,8 @@ import {
 import { link as linkStyles } from "@nextui-org/theme";
 import clsx from "clsx";
 
+import { LogoIcon } from "./icons";
+
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
 
@@ -26,6 +28,7 @@ export const Navbar = () => {
             color="foreground"
             href="/"
           >
+            <LogoIcon />
             <p className="font-bold text-inherit">Wild Rose</p>
           </Link>
         </NavbarBrand>
