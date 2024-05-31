@@ -9,10 +9,6 @@ export const siteConfig = {
       href: "/dashboard",
     },
     {
-      label: "Calendar",
-      href: "/calendar",
-    },
-    {
       label: "Settings",
       href: "/settings",
     },
@@ -25,10 +21,6 @@ export const siteConfig = {
     {
       label: "Dashboard",
       href: "/dashboard",
-    },
-    {
-      label: "Calendar",
-      href: "/calendar",
     },
     {
       label: "Settings",
