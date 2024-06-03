@@ -12,5 +12,5 @@ export function MoonIcon() {
         fillRule="evenodd"
       />
     </svg>
-  );
+  )
 }

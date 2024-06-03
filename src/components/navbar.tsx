@@ -1,5 +1,5 @@
-import { Avatar } from "@nextui-org/avatar";
-import { Link } from "@nextui-org/link";
+import { Avatar } from '@nextui-org/avatar'
+import { Link } from '@nextui-org/link'
 import {
   NavbarBrand,
   NavbarContent,
@@ -8,24 +8,24 @@ import {
   NavbarMenuItem,
   NavbarMenuToggle,
   Navbar as NextUINavbar,
-} from "@nextui-org/navbar";
-import clsx from "clsx";
-import { NavLink } from "react-router-dom";
-import { link } from "@nextui-org/theme";
+} from '@nextui-org/navbar'
+import clsx from 'clsx'
+import { NavLink } from 'react-router-dom'
+import { link } from '@nextui-org/theme'
 
-import { LogoIcon } from "./icons";
+import { LogoIcon } from './icons'
 
-import { siteConfig } from "@/site";
-import { ThemeSwitch } from "@/components/theme-switch";
+import { siteConfig } from '@/site'
+import { ThemeSwitch } from '@/components/theme-switch'
 
 export const Navbar = () => {
   return (
     <NextUINavbar maxWidth="xl" position="sticky">
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
         <NavbarMenuToggle className="sm:hidden" />
-        <NavbarBrand className="gap-3 max-w-fit">
+        <NavbarBrand className="max-w-fit gap-3">
           <Link
-            className="flex justify-start items-center gap-1"
+            className="flex items-center justify-start gap-1"
             color="foreground"
             href="/"
           >
@@ -33,14 +33,14 @@ export const Navbar = () => {
             <p className="font-bold text-inherit">Wild Rose</p>
           </Link>
         </NavbarBrand>
-        <div className="hidden sm:flex gap-4 justify-start ml-2">
+        <div className="ml-2 hidden justify-start gap-4 sm:flex">
           {siteConfig.navItems.map((item) => (
             <NavbarItem key={item.href}>
               <NavLink
                 className={({ isActive }) =>
                   clsx(
-                    link({ color: "foreground" }),
-                    isActive ? "font-medium text-primary" : "",
+                    link({ color: 'foreground' }),
+                    isActive ? 'font-medium text-primary' : ''
                   )
                 }
                 color="foreground"
@@ -71,9 +71,9 @@ export const Navbar = () => {
                 className={({ isActive }) =>
                   clsx(
                     index === siteConfig.navMenuItems.length - 1
-                      ? link({ color: "danger" })
-                      : link({ color: "foreground" }),
-                    isActive ? "font-medium text-primary" : "",
+                      ? link({ color: 'danger' })
+                      : link({ color: 'foreground' }),
+                    isActive ? 'font-medium text-primary' : ''
                   )
                 }
                 color="foreground"
@@ -86,5 +86,5 @@ export const Navbar = () => {
         </div>
       </NavbarMenu>
     </NextUINavbar>
-  );
-};
+  )
+}

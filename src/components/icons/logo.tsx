@@ -13,5 +13,5 @@ export function LogoIcon() {
         fillRule="evenodd"
       />
     </svg>
-  );
+  )
 }

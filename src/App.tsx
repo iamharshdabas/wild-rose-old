@@ -1,6 +1,6 @@
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from 'react-router-dom'
 
-import Dashboard from "@/pages/dashboard";
+import Dashboard from '@/pages/dashboard'
 
 function App() {
   return (
@@ -8,7 +8,7 @@ function App() {
       <Route element={<Navigate replace to="dashboard" />} path="/" />
       <Route element={<Dashboard />} path="/dashboard" />
     </Routes>
-  );
+  )
 }
 
-export default App;
+export default App
