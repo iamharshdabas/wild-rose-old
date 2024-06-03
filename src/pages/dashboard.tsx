@@ -1,5 +1,5 @@
-import { title } from "@/config/primitives";
-import DefaultLayout from "@/layouts/default";
+import { title } from "@/components/primitives";
+import DefaultLayout from "@/layout";
 
 export default function Dashboard() {
   return (
