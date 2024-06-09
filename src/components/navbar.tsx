@@ -70,9 +70,8 @@ export const Navbar = () => {
               <NavLink
                 className={({ isActive }) =>
                   clsx(
-                    index === siteConfig.navMenuItems.length - 1
-                      ? link({ color: 'danger' })
-                      : link({ color: 'foreground' }),
+                    index === siteConfig.navMenuItems.length - 1 &&
+                      link({ color: 'danger' }),
                     isActive ? 'font-medium text-primary' : ''
                   )
                 }
