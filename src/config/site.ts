@@ -7,6 +7,18 @@ export const siteConfig = {
       href: '/dashboard',
     },
     {
+      label: 'Bookings',
+      href: '/bookings',
+    },
+    {
+      label: 'Cabins',
+      href: '/cabins',
+    },
+    {
+      label: 'Users',
+      href: '/users',
+    },
+    {
       label: 'Settings',
       href: '/settings',
     },
@@ -19,6 +31,18 @@ export const siteConfig = {
     {
       label: 'Dashboard',
       href: '/dashboard',
+    },
+    {
+      label: 'Bookings',
+      href: '/bookings',
+    },
+    {
+      label: 'Cabins',
+      href: '/cabins',
+    },
+    {
+      label: 'Users',
+      href: '/users',
     },
     {
       label: 'Settings',

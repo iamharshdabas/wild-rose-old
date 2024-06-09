@@ -1,12 +1,12 @@
 import { title } from '@/config/primitives'
 import DefaultLayout from '@/layout'
 
-export default function Settings() {
+export default function Users() {
   return (
     <DefaultLayout>
       <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
         <div className="inline-block max-w-lg justify-center text-center">
-          <h1 className={title()}>Settings</h1>
+          <h1 className={title()}>Users</h1>
         </div>
       </section>
     </DefaultLayout>
