@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 
 import getCabins from '@/api/getCabins'
-import { title } from '@/components/primitives'
 import DefaultLayout from '@/layout'
+import { title } from '@/config/primitives'
 
 export default function Dashboard() {
   const { data } = useQuery({ queryKey: ['cabins'], queryFn: getCabins })

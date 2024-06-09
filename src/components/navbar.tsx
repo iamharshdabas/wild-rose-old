@@ -15,8 +15,8 @@ import { link } from '@nextui-org/theme'
 
 import { LogoIcon } from './icons'
 
-import { siteConfig } from '@/site'
 import { ThemeSwitch } from '@/components/theme-switch'
+import { siteConfig } from '@/config/site'
 
 export const Navbar = () => {
   return (
