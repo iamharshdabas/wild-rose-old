@@ -1,5 +1,4 @@
 import { Avatar } from '@nextui-org/avatar'
-import { Link } from '@nextui-org/link'
 import {
   NavbarBrand,
   NavbarContent,
@@ -9,9 +8,9 @@ import {
   NavbarMenuToggle,
   Navbar as NextUINavbar,
 } from '@nextui-org/navbar'
+import { link } from '@nextui-org/theme'
 import clsx from 'clsx'
 import { NavLink } from 'react-router-dom'
-import { link } from '@nextui-org/theme'
 
 import { LogoIcon } from './icons'
 
@@ -24,14 +23,14 @@ export const Navbar = () => {
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
         <NavbarMenuToggle className="sm:hidden" />
         <NavbarBrand className="max-w-fit gap-3">
-          <Link
+          <NavLink
             className="flex items-center justify-start gap-1"
             color="foreground"
-            href="/"
+            to="/"
           >
             <LogoIcon />
             <p className="font-bold text-inherit">Wild Rose</p>
-          </Link>
+          </NavLink>
         </NavbarBrand>
         <div className="ml-2 hidden justify-start gap-4 sm:flex">
           {siteConfig.navItems.map((item) => (
