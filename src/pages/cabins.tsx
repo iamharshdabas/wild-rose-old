@@ -151,7 +151,7 @@ export default function Cabins() {
               </TableBody>
             </Table>
           )}
-          <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+          <Modal isOpen={isOpen} size="5xl" onOpenChange={onOpenChange}>
             <ModalContent>
               {(onClose) => (
                 <>
@@ -160,11 +160,11 @@ export default function Cabins() {
                   </ModalHeader>
                   <ModalBody>
                     <Image
-                      isZoomed
+                      isBlurred
                       alt="Cabin image"
-                      height={512}
+                      height={1024}
                       src={selectedImage}
-                      width={768}
+                      width={1536}
                     />
                   </ModalBody>
                   <ModalFooter>
