@@ -162,9 +162,9 @@ export default function Cabins() {
                     <Image
                       isZoomed
                       alt="Cabin image"
-                      height={768}
+                      height={512}
                       src={selectedImage}
-                      width={512}
+                      width={768}
                     />
                   </ModalBody>
                   <ModalFooter>
