@@ -26,7 +26,6 @@ import { Button } from '@nextui-org/button'
 import DeleteIcon from '@/components/icons/delete'
 import EditIcon from '@/components/icons/edit'
 import EyeIcon from '@/components/icons/eye'
-import DefaultLayout from '@/layout'
 import { subtitle, title } from '@/config/primitives'
 import getRooms from '@/api/room/list'
 import { RoomsColumnProps, RoomsProps } from '@/types/room'
@@ -119,71 +118,67 @@ export default function RoomList() {
   )
 
   return (
-    <DefaultLayout>
-      <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
-        <div className="inline-block w-full max-w-7xl justify-center text-center">
-          <h1 className={title()}>Rooms</h1>
-        </div>
-        <div className="inline-block w-full max-w-7xl justify-center text-center">
-          {isLoading ? (
-            <Spinner />
-          ) : (
-            <Table aria-label="rooms table">
-              <TableHeader columns={columns}>
-                {(column) => (
-                  <TableColumn key={column.key}>
-                    <span className={cn(subtitle(), 'flex justify-center')}>
-                      {column.label}
-                    </span>
-                  </TableColumn>
-                )}
-              </TableHeader>
-              <TableBody emptyContent={'No rows to display.'} items={rooms}>
-                {(item) => (
-                  <TableRow key={item.id}>
-                    {(columnKey) => (
-                      <TableCell>
-                        {renderCell(item, columnKey as RoomsColumnProps)}
-                      </TableCell>
-                    )}
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          )}
-          <Modal isOpen={isOpen} size="5xl" onOpenChange={onOpenChange}>
-            <ModalContent>
-              {(onClose) => (
-                <>
-                  <ModalHeader className="flex flex-col gap-1">
-                    Room
-                  </ModalHeader>
-                  <ModalBody>
-                    <Image
-                      isBlurred
-                      alt="Room image"
-                      height={1024}
-                      src={selectedImage}
-                      width={1536}
-                    />
-                  </ModalBody>
-                  <ModalFooter>
-                    <Button color="danger" variant="light" onPress={onClose}>
-                      Close
-                    </Button>
-                    {/*
-                     * TODO: implement image actions
-                     */}
-                    {/* <Button color="primary" onPress={onClose}> */}
-                    {/*   Action */}
-                    {/* </Button> */}
-                  </ModalFooter>
-                </>
+    <>
+      <div className="inline-block w-full max-w-7xl justify-center text-center">
+        <h1 className={title()}>Rooms</h1>
+      </div>
+      <div className="inline-block w-full max-w-7xl justify-center text-center">
+        {isLoading ? (
+          <Spinner />
+        ) : (
+          <Table aria-label="rooms table">
+            <TableHeader columns={columns}>
+              {(column) => (
+                <TableColumn key={column.key}>
+                  <span className={cn(subtitle(), 'flex justify-center')}>
+                    {column.label}
+                  </span>
+                </TableColumn>
               )}
-            </ModalContent>
-          </Modal>
-        </div>
-      </section>
-    </DefaultLayout>
+            </TableHeader>
+            <TableBody emptyContent={'No rows to display.'} items={rooms}>
+              {(item) => (
+                <TableRow key={item.id}>
+                  {(columnKey) => (
+                    <TableCell>
+                      {renderCell(item, columnKey as RoomsColumnProps)}
+                    </TableCell>
+                  )}
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        )}
+        <Modal isOpen={isOpen} size="5xl" onOpenChange={onOpenChange}>
+          <ModalContent>
+            {(onClose) => (
+              <>
+                <ModalHeader className="flex flex-col gap-1">Room</ModalHeader>
+                <ModalBody>
+                  <Image
+                    isBlurred
+                    alt="Room image"
+                    height={1024}
+                    src={selectedImage}
+                    width={1536}
+                  />
+                </ModalBody>
+                <ModalFooter>
+                  <Button color="danger" variant="light" onPress={onClose}>
+                    Close
+                  </Button>
+                  {/*
+                   * TODO: implement image actions
+                   */}
+                  {/* <Button color="primary" onPress={onClose}> */}
+                  {/*   Action */}
+                  {/* </Button> */}
+                </ModalFooter>
+              </>
+            )}
+          </ModalContent>
+        </Modal>
+      </div>
+    </>
   )
 }
