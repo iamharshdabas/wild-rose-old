@@ -10,6 +10,7 @@ import {
 import { Tooltip } from '@nextui-org/tooltip'
 import { useQuery } from '@tanstack/react-query'
 import { useCallback } from 'react'
+import { cn } from '@nextui-org/theme'
 
 import getCabins from '@/api/getCabins'
 import DeleteIcon from '@/components/icons/delete'
@@ -62,7 +63,7 @@ export default function Cabins() {
           )
         case 'actions': // TODO: onClick CRUD operations
           return (
-            <div className="relative flex items-center gap-2">
+            <div className="relative flex items-center justify-center gap-2">
               <Tooltip content="Details">
                 <span className="cursor-pointer text-lg text-default-400 active:opacity-50">
                   <EyeIcon />
@@ -90,18 +91,20 @@ export default function Cabins() {
   return (
     <DefaultLayout>
       <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
-        <div className="inline-block max-w-lg justify-center text-center">
+        <div className="inline-block w-full max-w-6xl justify-center text-center">
           <h1 className={title()}>Cabins</h1>
         </div>
-        <div className="inline-block max-w-lg justify-center text-center">
+        <div className="inline-block w-full max-w-6xl justify-center text-center">
           {isLoading ? (
             <Spinner />
           ) : (
             <Table aria-label="cabins table">
               <TableHeader columns={columns}>
                 {(column) => (
-                  <TableColumn key={column.key} className={subtitle()}>
-                    {column.label}
+                  <TableColumn key={column.key}>
+                    <span className={cn(subtitle(), 'flex justify-center')}>
+                      {column.label}
+                    </span>
                   </TableColumn>
                 )}
               </TableHeader>
