@@ -1,63 +1,123 @@
-import { useQuery } from '@tanstack/react-query'
+import { Spinner } from '@nextui-org/spinner'
 import {
   Table,
-  TableHeader,
   TableBody,
-  TableColumn,
-  TableRow,
   TableCell,
-  getKeyValue,
+  TableColumn,
+  TableHeader,
+  TableRow,
 } from '@nextui-org/table'
+import { Tooltip } from '@nextui-org/tooltip'
+import { useQuery } from '@tanstack/react-query'
+import { useCallback } from 'react'
 
-import DefaultLayout from '@/layout'
 import getCabins from '@/api/getCabins'
+import DeleteIcon from '@/components/icons/delete'
+import EditIcon from '@/components/icons/edit'
+import EyeIcon from '@/components/icons/eye'
+import DefaultLayout from '@/layout'
 import { CabinColumnProps, CabinProps } from '@/types/cabin'
+import { subtitle, title } from '@/config/primitives'
 
 export default function Cabins() {
-  const { data: cabins } = useQuery({
+  const { data: cabins, isLoading } = useQuery({
     queryKey: ['cabins'],
     queryFn: getCabins,
   })
 
-  const columns: CabinColumnProps[] = [
-    {
-      key: 'id',
-      label: 'ID',
-    },
-    {
-      key: 'created_at',
-      label: 'Created At',
-    },
-    {
-      key: 'name',
-      label: 'Name',
-    },
-    {
-      key: 'price',
-      label: 'Price',
-    },
+  const columns: { key: CabinColumnProps; label: string }[] = [
+    { key: 'id', label: 'ID' },
+    { key: 'created_at', label: 'Created At' },
+    { key: 'name', label: 'Name' },
+    { key: 'price', label: 'Price' },
+    { key: 'actions', label: 'Actions' },
   ]
+
+  const renderCell = useCallback(
+    (cabins: CabinProps, columnKey: CabinColumnProps) => {
+      const cellValue = cabins[columnKey]
+
+      switch (columnKey) {
+        case 'id':
+          return <h2 className={subtitle()}>{cellValue}</h2>
+        case 'created_at':
+          const formattedDate = new Date(cellValue).toLocaleDateString(
+            'en-US',
+            {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            }
+          )
+
+          return <h2 className={subtitle()}>{formattedDate}</h2>
+        case 'name':
+          return <h2 className={subtitle()}>{cellValue}</h2>
+        case 'price':
+          return (
+            <h2 className={subtitle()}>
+              <span>$</span>
+              {cellValue}
+            </h2>
+          )
+        case 'actions': // TODO: onClick CRUD operations
+          return (
+            <div className="relative flex items-center gap-2">
+              <Tooltip content="Details">
+                <span className="cursor-pointer text-lg text-default-400 active:opacity-50">
+                  <EyeIcon />
+                </span>
+              </Tooltip>
+              <Tooltip content="Edit cabin">
+                <span className="cursor-pointer text-lg text-default-400 active:opacity-50">
+                  <EditIcon />
+                </span>
+              </Tooltip>
+              <Tooltip color="danger" content="Delete cabin">
+                <span className="cursor-pointer text-lg text-danger active:opacity-50">
+                  <DeleteIcon />
+                </span>
+              </Tooltip>
+            </div>
+          )
+        default:
+          return cellValue
+      }
+    },
+    []
+  )
 
   return (
     <DefaultLayout>
       <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
         <div className="inline-block max-w-lg justify-center text-center">
-          <Table aria-label="cabins table">
-            <TableHeader columns={columns}>
-              {(column) => (
-                <TableColumn key={column.key}>{column.label}</TableColumn>
-              )}
-            </TableHeader>
-            <TableBody items={cabins}>
-              {(item: CabinProps) => (
-                <TableRow key={item.id}>
-                  {(columnKey) => (
-                    <TableCell>{getKeyValue(item, columnKey)}</TableCell>
-                  )}
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
+          <h1 className={title()}>Cabins</h1>
+        </div>
+        <div className="inline-block max-w-lg justify-center text-center">
+          {isLoading ? (
+            <Spinner />
+          ) : (
+            <Table aria-label="cabins table">
+              <TableHeader columns={columns}>
+                {(column) => (
+                  <TableColumn key={column.key} className={subtitle()}>
+                    {column.label}
+                  </TableColumn>
+                )}
+              </TableHeader>
+              <TableBody emptyContent={'No rows to display.'} items={cabins}>
+                {(item) => (
+                  <TableRow key={item.id}>
+                    {(columnKey) => (
+                      <TableCell>
+                        {renderCell(item, columnKey as CabinColumnProps)}
+                      </TableCell>
+                    )}
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          )}
         </div>
       </section>
     </DefaultLayout>

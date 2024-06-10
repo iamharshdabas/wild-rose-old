@@ -1,3 +1,6 @@
+export * from './delete'
+export * from './edit'
+export * from './eye'
 export * from './logo'
 export * from './moon'
 export * from './sun'
