@@ -52,7 +52,7 @@ export const Navbar = () => {
         </div>
       </NavbarContent>
 
-      <NavbarContent className="pl-20" justify="end">
+      <NavbarContent justify="end">
         <ThemeSwitch />
         <Avatar
           isBordered

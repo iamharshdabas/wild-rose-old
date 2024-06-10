@@ -121,10 +121,10 @@ export default function Cabins() {
   return (
     <DefaultLayout>
       <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
-        <div className="inline-block w-full max-w-6xl justify-center text-center">
+        <div className="inline-block w-full max-w-7xl justify-center text-center">
           <h1 className={title()}>Cabins</h1>
         </div>
-        <div className="inline-block w-full max-w-6xl justify-center text-center">
+        <div className="inline-block w-full max-w-7xl justify-center text-center">
           {isLoading ? (
             <Spinner />
           ) : (
