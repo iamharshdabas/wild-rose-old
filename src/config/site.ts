@@ -11,8 +11,8 @@ export const siteConfig = {
       href: '/bookings',
     },
     {
-      label: 'Cabins',
-      href: '/cabins',
+      label: 'Rooms',
+      href: '/room',
     },
     {
       label: 'Users',
@@ -37,8 +37,8 @@ export const siteConfig = {
       href: '/bookings',
     },
     {
-      label: 'Cabins',
-      href: '/cabins',
+      label: 'Rooms',
+      href: '/room',
     },
     {
       label: 'Users',

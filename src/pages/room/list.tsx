@@ -23,24 +23,24 @@ import { Avatar } from '@nextui-org/avatar'
 import { Image } from '@nextui-org/image'
 import { Button } from '@nextui-org/button'
 
-import getCabins from '@/api/getCabins'
 import DeleteIcon from '@/components/icons/delete'
 import EditIcon from '@/components/icons/edit'
 import EyeIcon from '@/components/icons/eye'
 import DefaultLayout from '@/layout'
-import { CabinColumnProps, CabinProps } from '@/types/cabin'
 import { subtitle, title } from '@/config/primitives'
+import getRooms from '@/api/room/list'
+import { RoomsColumnProps, RoomsProps } from '@/types/room'
 
-export default function Cabins() {
-  const { data: cabins, isLoading } = useQuery({
-    queryKey: ['cabins'],
-    queryFn: getCabins,
+export default function RoomList() {
+  const { data: rooms, isLoading } = useQuery({
+    queryKey: ['rooms'],
+    queryFn: getRooms,
   })
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const [selectedImage, setSelectedImage] = useState('')
 
-  const columns: { key: CabinColumnProps; label: string }[] = [
+  const columns: { key: RoomsColumnProps; label: string }[] = [
     { key: 'image', label: 'Image' },
     { key: 'id', label: 'ID' },
     { key: 'created_at', label: 'Created At' },
@@ -50,8 +50,8 @@ export default function Cabins() {
   ]
 
   const renderCell = useCallback(
-    (cabins: CabinProps, columnKey: CabinColumnProps) => {
-      const cellValue = cabins[columnKey]
+    (rooms: RoomsProps, columnKey: RoomsColumnProps) => {
+      const cellValue = rooms[columnKey]
 
       switch (columnKey) {
         case 'image':
@@ -99,12 +99,12 @@ export default function Cabins() {
                   <EyeIcon />
                 </span>
               </Tooltip>
-              <Tooltip content="Edit cabin">
+              <Tooltip content="Edit room">
                 <span className="cursor-pointer text-lg text-default-400 active:opacity-50">
                   <EditIcon />
                 </span>
               </Tooltip>
-              <Tooltip color="danger" content="Delete cabin">
+              <Tooltip color="danger" content="Delete room">
                 <span className="cursor-pointer text-lg text-danger active:opacity-50">
                   <DeleteIcon />
                 </span>
@@ -122,13 +122,13 @@ export default function Cabins() {
     <DefaultLayout>
       <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
         <div className="inline-block w-full max-w-7xl justify-center text-center">
-          <h1 className={title()}>Cabins</h1>
+          <h1 className={title()}>Rooms</h1>
         </div>
         <div className="inline-block w-full max-w-7xl justify-center text-center">
           {isLoading ? (
             <Spinner />
           ) : (
-            <Table aria-label="cabins table">
+            <Table aria-label="rooms table">
               <TableHeader columns={columns}>
                 {(column) => (
                   <TableColumn key={column.key}>
@@ -138,12 +138,12 @@ export default function Cabins() {
                   </TableColumn>
                 )}
               </TableHeader>
-              <TableBody emptyContent={'No rows to display.'} items={cabins}>
+              <TableBody emptyContent={'No rows to display.'} items={rooms}>
                 {(item) => (
                   <TableRow key={item.id}>
                     {(columnKey) => (
                       <TableCell>
-                        {renderCell(item, columnKey as CabinColumnProps)}
+                        {renderCell(item, columnKey as RoomsColumnProps)}
                       </TableCell>
                     )}
                   </TableRow>
@@ -156,12 +156,12 @@ export default function Cabins() {
               {(onClose) => (
                 <>
                   <ModalHeader className="flex flex-col gap-1">
-                    Cabin
+                    Room
                   </ModalHeader>
                   <ModalBody>
                     <Image
                       isBlurred
-                      alt="Cabin image"
+                      alt="Room image"
                       height={1024}
                       src={selectedImage}
                       width={1536}

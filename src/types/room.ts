@@ -1,4 +1,4 @@
-export type CabinProps = {
+export type RoomsProps = {
   image: string
   id: number
   created_at: string
@@ -8,4 +8,4 @@ export type CabinProps = {
   actions: string // NOTE: there is no use of actions here, it is here so that i dont have to create multiple types for `Cabin column` and `Cabins keyof`
 }
 
-export type CabinColumnProps = keyof CabinProps
+export type RoomsColumnProps = keyof RoomsProps
