@@ -9,8 +9,19 @@ import {
 } from '@nextui-org/table'
 import { Tooltip } from '@nextui-org/tooltip'
 import { useQuery } from '@tanstack/react-query'
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import { cn } from '@nextui-org/theme'
+import {
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  useDisclosure,
+} from '@nextui-org/modal'
+import { Avatar } from '@nextui-org/avatar'
+import { Image } from '@nextui-org/image'
+import { Button } from '@nextui-org/button'
 
 import getCabins from '@/api/getCabins'
 import DeleteIcon from '@/components/icons/delete'
@@ -26,7 +37,11 @@ export default function Cabins() {
     queryFn: getCabins,
   })
 
+  const { isOpen, onOpen, onOpenChange } = useDisclosure()
+  const [selectedImage, setSelectedImage] = useState('')
+
   const columns: { key: CabinColumnProps; label: string }[] = [
+    { key: 'image', label: 'Image' },
     { key: 'id', label: 'ID' },
     { key: 'created_at', label: 'Created At' },
     { key: 'name', label: 'Name' },
@@ -39,6 +54,21 @@ export default function Cabins() {
       const cellValue = cabins[columnKey]
 
       switch (columnKey) {
+        case 'image':
+          return (
+            <div className="flex justify-center">
+              <Avatar
+                isBordered
+                radius="sm"
+                size="lg"
+                src={cellValue.toString()}
+                onClick={() => {
+                  onOpen()
+                  setSelectedImage(cellValue.toString())
+                }}
+              />
+            </div>
+          )
         case 'id':
           return <h2 className={subtitle()}>{cellValue}</h2>
         case 'created_at':
@@ -121,6 +151,37 @@ export default function Cabins() {
               </TableBody>
             </Table>
           )}
+          <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+            <ModalContent>
+              {(onClose) => (
+                <>
+                  <ModalHeader className="flex flex-col gap-1">
+                    Cabin
+                  </ModalHeader>
+                  <ModalBody>
+                    <Image
+                      isZoomed
+                      alt="Cabin image"
+                      height={768}
+                      src={selectedImage}
+                      width={512}
+                    />
+                  </ModalBody>
+                  <ModalFooter>
+                    <Button color="danger" variant="light" onPress={onClose}>
+                      Close
+                    </Button>
+                    {/*
+                     * TODO: implement image actions
+                     */}
+                    {/* <Button color="primary" onPress={onClose}> */}
+                    {/*   Action */}
+                    {/* </Button> */}
+                  </ModalFooter>
+                </>
+              )}
+            </ModalContent>
+          </Modal>
         </div>
       </section>
     </DefaultLayout>

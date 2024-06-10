@@ -1,4 +1,5 @@
 export type CabinProps = {
+  image: string
   id: number
   created_at: string
   name: string
