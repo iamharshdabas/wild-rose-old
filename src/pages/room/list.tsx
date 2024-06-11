@@ -1,3 +1,16 @@
+import { Avatar } from '@nextui-org/avatar'
+import { Button } from '@nextui-org/button'
+import { Image } from '@nextui-org/image'
+import { Input } from '@nextui-org/input'
+import {
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  useDisclosure,
+} from '@nextui-org/modal'
+import { Pagination } from '@nextui-org/pagination'
 import { Spinner } from '@nextui-org/spinner'
 import {
   Table,
@@ -7,29 +20,18 @@ import {
   TableHeader,
   TableRow,
 } from '@nextui-org/table'
+import { cn } from '@nextui-org/theme'
 import { Tooltip } from '@nextui-org/tooltip'
 import { useQuery } from '@tanstack/react-query'
-import { useCallback, useMemo, useState } from 'react'
-import { cn } from '@nextui-org/theme'
-import {
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  useDisclosure,
-} from '@nextui-org/modal'
-import { Avatar } from '@nextui-org/avatar'
-import { Image } from '@nextui-org/image'
-import { Button } from '@nextui-org/button'
-import { Pagination } from '@nextui-org/pagination'
+import { ChangeEvent, useCallback, useMemo, useState } from 'react'
 
-import DeleteIcon from '@/components/icons/delete'
-import EditIcon from '@/components/icons/edit'
-import EyeIcon from '@/components/icons/eye'
-import { subtitle, title } from '@/config/primitives'
-import getRooms from '@/api/room/list'
 import { RoomsColumnProps, RoomsProps } from '@/types/room'
+import { subtitle, title } from '@/config/primitives'
+import EyeIcon from '@/components/icons/eye'
+import EditIcon from '@/components/icons/edit'
+import DeleteIcon from '@/components/icons/delete'
+import { SearchIcon } from '@/components/icons'
+import getRooms from '@/api/room/list'
 
 export default function RoomList() {
   const { data: rooms, isLoading } = useQuery({
@@ -39,26 +41,194 @@ export default function RoomList() {
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const [selectedImage, setSelectedImage] = useState('')
+  const [filterValue, setFilterValue] = useState('')
+  const [rowsPerPage, setRowsPerPage] = useState(10)
   const [page, setPage] = useState(1)
-  const rowsPerPage = 10
 
-  const pages = rooms ? Math.ceil(rooms.length / rowsPerPage) : 1
+  const hasSearchFilter = Boolean(filterValue)
+
+  const filteredItems = useMemo(() => {
+    let filteredRooms = rooms
+
+    if (hasSearchFilter) {
+      filteredRooms = filteredRooms?.filter((room) =>
+        room.name.toLowerCase().includes(filterValue.toLowerCase())
+      )
+    }
+    // if (
+    //   statusFilter !== 'all' &&
+    //   Array.from(statusFilter).length !== statusOptions.length
+    // ) {
+    //   filteredRooms = filteredRooms.filter((user) =>
+    //     Array.from(statusFilter).includes(user.status)
+    //   )
+    // }
+
+    return filteredRooms
+  }, [rooms, filterValue])
+
+  const pages = filteredItems
+    ? Math.ceil(filteredItems?.length / rowsPerPage)
+    : 1
 
   const items = useMemo(() => {
     const start = (page - 1) * rowsPerPage
     const end = start + rowsPerPage
 
-    return rooms?.slice(start, end)
-  }, [page, rooms])
+    return filteredItems?.slice(start, end)
+  }, [page, filteredItems, rowsPerPage])
 
-  const columns: { key: RoomsColumnProps; label: string }[] = [
-    { key: 'image', label: 'Image' },
-    { key: 'id', label: 'ID' },
-    { key: 'created_at', label: 'Created At' },
-    { key: 'name', label: 'Name' },
-    { key: 'price', label: 'Price' },
-    { key: 'actions', label: 'Actions' },
-  ]
+  const onRowsPerPageChange = useCallback(
+    (e: ChangeEvent<HTMLSelectElement>) => {
+      setRowsPerPage(Number(e.target.value))
+      setPage(1)
+    },
+    []
+  )
+
+  const onSearchChange = useCallback((value?: string) => {
+    if (value) {
+      setFilterValue(value)
+      setPage(1)
+    } else {
+      setFilterValue('')
+    }
+  }, [])
+
+  const onClear = useCallback(() => {
+    setFilterValue('')
+    setPage(1)
+  }, [])
+
+  const topContent = useMemo(() => {
+    return (
+      <div className="flex flex-col gap-4">
+        <div className="flex items-end justify-between gap-4">
+          <Input
+            isClearable
+            className="w-full sm:max-w-[44%]"
+            placeholder="Search by name..."
+            startContent={<SearchIcon />}
+            value={filterValue}
+            onClear={onClear}
+            onValueChange={onSearchChange}
+          />
+          {/* <div className="flex gap-3"> */}
+          {/*   <Dropdown> */}
+          {/*     <DropdownTrigger className="hidden sm:flex"> */}
+          {/*       <Button */}
+          {/*         endContent={<ChevronDownIcon className="text-small" />} */}
+          {/*         variant="flat" */}
+          {/*       > */}
+          {/*         Status */}
+          {/*       </Button> */}
+          {/*     </DropdownTrigger> */}
+          {/*     <DropdownMenu */}
+          {/*       disallowEmptySelection */}
+          {/*       aria-label="Table Columns" */}
+          {/*       closeOnSelect={false} */}
+          {/*       selectedKeys={statusFilter} */}
+          {/*       selectionMode="multiple" */}
+          {/*       onSelectionChange={setStatusFilter} */}
+          {/*     > */}
+          {/*       {statusOptions.map((status) => ( */}
+          {/*         <DropdownItem key={status.uid} className="capitalize"> */}
+          {/*           {capitalize(status.name)} */}
+          {/*         </DropdownItem> */}
+          {/*       ))} */}
+          {/*     </DropdownMenu> */}
+          {/*   </Dropdown> */}
+          {/*   <Dropdown> */}
+          {/*     <DropdownTrigger className="hidden sm:flex"> */}
+          {/*       <Button */}
+          {/*         endContent={<ChevronDownIcon className="text-small" />} */}
+          {/*         variant="flat" */}
+          {/*       > */}
+          {/*         Columns */}
+          {/*       </Button> */}
+          {/*     </DropdownTrigger> */}
+          {/*     <DropdownMenu */}
+          {/*       disallowEmptySelection */}
+          {/*       aria-label="Table Columns" */}
+          {/*       closeOnSelect={false} */}
+          {/*       selectedKeys={visibleColumns} */}
+          {/*       selectionMode="multiple" */}
+          {/*       onSelectionChange={setVisibleColumns} */}
+          {/*     > */}
+          {/*       {columns.map((column) => ( */}
+          {/*         <DropdownItem key={column.uid} className="capitalize"> */}
+          {/*           {capitalize(column.name)} */}
+          {/*         </DropdownItem> */}
+          {/*       ))} */}
+          {/*     </DropdownMenu> */}
+          {/*   </Dropdown> */}
+          {/*   <Button color="primary" endContent={<PlusIcon />}> */}
+          {/*     Add New */}
+          {/*   </Button> */}
+          {/* </div> */}
+        </div>
+        <div className="flex items-center justify-between">
+          <span className="text-small text-default-400">
+            Total {rooms?.length} rooms
+          </span>
+          <label className="flex items-center gap-2 text-small text-default-400">
+            Rows per page:
+            <select
+              className="rounded-lg px-2 py-1 text-small text-default-400 outline-none"
+              value={rowsPerPage}
+              onChange={onRowsPerPageChange}
+            >
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="15">15</option>
+            </select>
+          </label>
+        </div>
+      </div>
+    )
+  }, [
+    filterValue,
+    onSearchChange,
+    onRowsPerPageChange,
+    rowsPerPage,
+    rooms?.length,
+    hasSearchFilter,
+  ])
+
+  const bottomContent = useMemo(() => {
+    return (
+      <div className="flex w-full justify-center">
+        <Pagination
+          loop
+          showControls
+          showShadow
+          color="primary"
+          page={page}
+          total={pages}
+          variant="bordered"
+          onChange={(page) => setPage(page)}
+        />
+      </div>
+    )
+  }, [
+    // selectedKeys,
+    // items.length,
+    page,
+    pages,
+    // hasSearchFilter,
+  ])
+
+  const columns: { key: RoomsColumnProps; label: string }[] = useMemo(
+    () => [
+      { key: 'image', label: 'Image' },
+      { key: 'id', label: 'ID' },
+      { key: 'created_at', label: 'Created At' },
+      { key: 'name', label: 'Name' },
+      { key: 'price', label: 'Price' },
+      { key: 'actions', label: 'Actions' },
+    ],
+    []
+  )
 
   const renderCell = useCallback(
     (rooms: RoomsProps, columnKey: RoomsColumnProps) => {
@@ -141,20 +311,8 @@ export default function RoomList() {
         ) : (
           <Table
             aria-label="rooms table"
-            bottomContent={
-              <div className="flex w-full justify-center">
-                <Pagination
-                  loop
-                  showControls
-                  showShadow
-                  color="primary"
-                  page={page}
-                  total={pages}
-                  variant="bordered"
-                  onChange={(page) => setPage(page)}
-                />
-              </div>
-            }
+            bottomContent={bottomContent}
+            topContent={topContent}
           >
             <TableHeader columns={columns}>
               {(column) => (
