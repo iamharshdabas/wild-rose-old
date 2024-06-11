@@ -13,6 +13,7 @@ import {
 import { Pagination } from '@nextui-org/pagination'
 import { Spinner } from '@nextui-org/spinner'
 import {
+  SortDescriptor,
   Table,
   TableBody,
   TableCell,
@@ -20,10 +21,10 @@ import {
   TableHeader,
   TableRow,
 } from '@nextui-org/table'
-import { cn } from '@nextui-org/theme'
 import { Tooltip } from '@nextui-org/tooltip'
 import { useQuery } from '@tanstack/react-query'
 import { ChangeEvent, useCallback, useMemo, useState } from 'react'
+import { cn } from '@nextui-org/theme'
 
 import { RoomsColumnProps, RoomsProps } from '@/types/room'
 import { subtitle, title } from '@/config/primitives'
@@ -44,38 +45,34 @@ export default function RoomList() {
   const [filterValue, setFilterValue] = useState('')
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [page, setPage] = useState(1)
+  const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
+    column: 'id',
+    direction: 'ascending',
+  })
 
   const hasSearchFilter = Boolean(filterValue)
 
   const filteredItems = useMemo(() => {
+    if (!rooms) return []
+
     let filteredRooms = rooms
 
     if (hasSearchFilter) {
-      filteredRooms = filteredRooms?.filter((room) =>
+      filteredRooms = filteredRooms.filter((room) =>
         room.name.toLowerCase().includes(filterValue.toLowerCase())
       )
     }
-    // if (
-    //   statusFilter !== 'all' &&
-    //   Array.from(statusFilter).length !== statusOptions.length
-    // ) {
-    //   filteredRooms = filteredRooms.filter((user) =>
-    //     Array.from(statusFilter).includes(user.status)
-    //   )
-    // }
 
     return filteredRooms
   }, [rooms, filterValue])
 
-  const pages = filteredItems
-    ? Math.ceil(filteredItems?.length / rowsPerPage)
-    : 1
+  const pages = Math.ceil(filteredItems.length / rowsPerPage)
 
   const items = useMemo(() => {
     const start = (page - 1) * rowsPerPage
     const end = start + rowsPerPage
 
-    return filteredItems?.slice(start, end)
+    return filteredItems.slice(start, end)
   }, [page, filteredItems, rowsPerPage])
 
   const onRowsPerPageChange = useCallback(
@@ -85,6 +82,18 @@ export default function RoomList() {
     },
     []
   )
+
+  const sortedItems = useMemo(() => {
+    return [...items].sort((a: RoomsColumnProps, b: RoomsColumnProps) => {
+      const first = a[sortDescriptor.column as keyof RoomsColumnProps] as number
+      const second = b[
+        sortDescriptor.column as keyof RoomsColumnProps
+      ] as number
+      const cmp = first < second ? -1 : first > second ? 1 : 0
+
+      return sortDescriptor.direction === 'descending' ? -cmp : cmp
+    })
+  }, [sortDescriptor, items])
 
   const onSearchChange = useCallback((value?: string) => {
     if (value) {
@@ -113,59 +122,6 @@ export default function RoomList() {
             onClear={onClear}
             onValueChange={onSearchChange}
           />
-          {/* <div className="flex gap-3"> */}
-          {/*   <Dropdown> */}
-          {/*     <DropdownTrigger className="hidden sm:flex"> */}
-          {/*       <Button */}
-          {/*         endContent={<ChevronDownIcon className="text-small" />} */}
-          {/*         variant="flat" */}
-          {/*       > */}
-          {/*         Status */}
-          {/*       </Button> */}
-          {/*     </DropdownTrigger> */}
-          {/*     <DropdownMenu */}
-          {/*       disallowEmptySelection */}
-          {/*       aria-label="Table Columns" */}
-          {/*       closeOnSelect={false} */}
-          {/*       selectedKeys={statusFilter} */}
-          {/*       selectionMode="multiple" */}
-          {/*       onSelectionChange={setStatusFilter} */}
-          {/*     > */}
-          {/*       {statusOptions.map((status) => ( */}
-          {/*         <DropdownItem key={status.uid} className="capitalize"> */}
-          {/*           {capitalize(status.name)} */}
-          {/*         </DropdownItem> */}
-          {/*       ))} */}
-          {/*     </DropdownMenu> */}
-          {/*   </Dropdown> */}
-          {/*   <Dropdown> */}
-          {/*     <DropdownTrigger className="hidden sm:flex"> */}
-          {/*       <Button */}
-          {/*         endContent={<ChevronDownIcon className="text-small" />} */}
-          {/*         variant="flat" */}
-          {/*       > */}
-          {/*         Columns */}
-          {/*       </Button> */}
-          {/*     </DropdownTrigger> */}
-          {/*     <DropdownMenu */}
-          {/*       disallowEmptySelection */}
-          {/*       aria-label="Table Columns" */}
-          {/*       closeOnSelect={false} */}
-          {/*       selectedKeys={visibleColumns} */}
-          {/*       selectionMode="multiple" */}
-          {/*       onSelectionChange={setVisibleColumns} */}
-          {/*     > */}
-          {/*       {columns.map((column) => ( */}
-          {/*         <DropdownItem key={column.uid} className="capitalize"> */}
-          {/*           {capitalize(column.name)} */}
-          {/*         </DropdownItem> */}
-          {/*       ))} */}
-          {/*     </DropdownMenu> */}
-          {/*   </Dropdown> */}
-          {/*   <Button color="primary" endContent={<PlusIcon />}> */}
-          {/*     Add New */}
-          {/*   </Button> */}
-          {/* </div> */}
         </div>
         <div className="flex items-center justify-between">
           <span className="text-small text-default-400">
@@ -218,13 +174,17 @@ export default function RoomList() {
     // hasSearchFilter,
   ])
 
-  const columns: { key: RoomsColumnProps; label: string }[] = useMemo(
+  const columns: {
+    key: RoomsColumnProps
+    label: string
+    sortable?: boolean
+  }[] = useMemo(
     () => [
       { key: 'image', label: 'Image' },
-      { key: 'id', label: 'ID' },
-      { key: 'created_at', label: 'Created At' },
-      { key: 'name', label: 'Name' },
-      { key: 'price', label: 'Price' },
+      { key: 'id', label: 'ID', sortable: true },
+      { key: 'created_at', label: 'Created At', sortable: true },
+      { key: 'name', label: 'Name', sortable: true },
+      { key: 'price', label: 'Price', sortable: true },
       { key: 'actions', label: 'Actions' },
     ],
     []
@@ -312,18 +272,24 @@ export default function RoomList() {
           <Table
             aria-label="rooms table"
             bottomContent={bottomContent}
+            bottomContentPlacement="outside"
+            sortDescriptor={sortDescriptor}
             topContent={topContent}
+            topContentPlacement="outside"
+            onSortChange={setSortDescriptor}
           >
             <TableHeader columns={columns}>
               {(column) => (
-                <TableColumn key={column.key}>
-                  <span className={cn(subtitle(), 'flex justify-center')}>
-                    {column.label}
-                  </span>
+                <TableColumn
+                  key={column.key}
+                  allowsSorting={column.sortable}
+                  className={cn(subtitle(), 'text-center')}
+                >
+                  {column.label}
                 </TableColumn>
               )}
             </TableHeader>
-            <TableBody emptyContent={'No rows to display.'} items={items}>
+            <TableBody emptyContent={'No rows to display.'} items={sortedItems}>
               {(item: RoomsProps) => (
                 <TableRow key={item.id}>
                   {(columnKey) => (
