@@ -40,7 +40,7 @@ export default function RoomList() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const [selectedImage, setSelectedImage] = useState('')
   const [page, setPage] = useState(1)
-  const rowsPerPage = 12
+  const rowsPerPage = 10
 
   const pages = rooms ? Math.ceil(rooms.length / rowsPerPage) : 1
 
@@ -143,12 +143,13 @@ export default function RoomList() {
             bottomContent={
               <div className="flex w-full justify-center">
                 <Pagination
-                  isCompact
+                  loop
                   showControls
                   showShadow
-                  color="secondary"
+                  color="primary"
                   page={page}
                   total={pages}
+                  variant="bordered"
                   onChange={(page) => setPage(page)}
                 />
               </div>
