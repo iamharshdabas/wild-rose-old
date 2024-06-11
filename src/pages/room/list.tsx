@@ -9,7 +9,7 @@ import {
 } from '@nextui-org/table'
 import { Tooltip } from '@nextui-org/tooltip'
 import { useQuery } from '@tanstack/react-query'
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { cn } from '@nextui-org/theme'
 import {
   Modal,
@@ -22,6 +22,7 @@ import {
 import { Avatar } from '@nextui-org/avatar'
 import { Image } from '@nextui-org/image'
 import { Button } from '@nextui-org/button'
+import { Pagination } from '@nextui-org/pagination'
 
 import DeleteIcon from '@/components/icons/delete'
 import EditIcon from '@/components/icons/edit'
@@ -38,6 +39,17 @@ export default function RoomList() {
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const [selectedImage, setSelectedImage] = useState('')
+  const [page, setPage] = useState(1)
+  const rowsPerPage = 12
+
+  const pages = rooms ? Math.ceil(rooms.length / rowsPerPage) : 1
+
+  const items = useMemo(() => {
+    const start = (page - 1) * rowsPerPage
+    const end = start + rowsPerPage
+
+    return rooms?.slice(start, end)
+  }, [page, rooms])
 
   const columns: { key: RoomsColumnProps; label: string }[] = [
     { key: 'image', label: 'Image' },
@@ -119,14 +131,29 @@ export default function RoomList() {
 
   return (
     <>
-      <div className="inline-block w-full max-w-7xl justify-center text-center">
+      <div className="w-full max-w-7xl text-center">
         <h1 className={title()}>Rooms</h1>
       </div>
-      <div className="inline-block w-full max-w-7xl justify-center text-center">
+      <div className="w-full max-w-7xl pb-16 text-center">
         {isLoading ? (
           <Spinner />
         ) : (
-          <Table aria-label="rooms table">
+          <Table
+            aria-label="rooms table"
+            bottomContent={
+              <div className="flex w-full justify-center">
+                <Pagination
+                  isCompact
+                  showControls
+                  showShadow
+                  color="secondary"
+                  page={page}
+                  total={pages}
+                  onChange={(page) => setPage(page)}
+                />
+              </div>
+            }
+          >
             <TableHeader columns={columns}>
               {(column) => (
                 <TableColumn key={column.key}>
@@ -136,8 +163,8 @@ export default function RoomList() {
                 </TableColumn>
               )}
             </TableHeader>
-            <TableBody emptyContent={'No rows to display.'} items={rooms}>
-              {(item) => (
+            <TableBody emptyContent={'No rows to display.'} items={items}>
+              {(item: RoomsProps) => (
                 <TableRow key={item.id}>
                   {(columnKey) => (
                     <TableCell>
