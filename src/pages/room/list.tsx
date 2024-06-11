@@ -70,6 +70,7 @@ export default function RoomList() {
             <div className="flex justify-center">
               <Avatar
                 isBordered
+                className="cursor-pointer"
                 radius="sm"
                 size="lg"
                 src={cellValue.toString()}
