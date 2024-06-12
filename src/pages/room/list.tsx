@@ -22,7 +22,7 @@ import {
   TableRow,
 } from '@nextui-org/table'
 import { Tooltip } from '@nextui-org/tooltip'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { ChangeEvent, useCallback, useMemo, useState } from 'react'
 import { cn } from '@nextui-org/theme'
 
@@ -32,12 +32,21 @@ import EyeIcon from '@/components/icons/eye'
 import EditIcon from '@/components/icons/edit'
 import DeleteIcon from '@/components/icons/delete'
 import { SearchIcon } from '@/components/icons'
-import getRooms from '@/api/room/list'
+import { deleteRooms, getRooms } from '@/api/room'
 
 export default function RoomList() {
+  const queryClient = useQueryClient()
+
   const { data: rooms, isLoading } = useQuery({
     queryKey: ['rooms'],
     queryFn: getRooms,
+  })
+
+  const { isPending, mutate } = useMutation({
+    mutationFn: (id: number) => deleteRooms(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['rooms'] })
+    },
   })
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
@@ -166,13 +175,7 @@ export default function RoomList() {
         />
       </div>
     )
-  }, [
-    // selectedKeys,
-    // items.length,
-    page,
-    pages,
-    // hasSearchFilter,
-  ])
+  }, [page, pages])
 
   const columns: {
     key: RoomsColumnProps
@@ -247,9 +250,15 @@ export default function RoomList() {
                 </span>
               </Tooltip>
               <Tooltip color="danger" content="Delete room">
-                <span className="cursor-pointer text-lg text-danger active:opacity-50">
+                <Button
+                  isIconOnly
+                  color="danger"
+                  disabled={isPending}
+                  variant="light"
+                  onClick={() => mutate(rooms.id)}
+                >
                   <DeleteIcon />
-                </span>
+                </Button>
               </Tooltip>
             </div>
           )
