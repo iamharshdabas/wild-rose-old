@@ -29,7 +29,7 @@ import toast from 'react-hot-toast'
 
 import RoomCreate from './create'
 
-import { RoomsColumnProps, RoomsProps } from '@/types/room'
+import { RoomColumnProps, RoomProps } from '@/types/room'
 import { subtitle, title } from '@/config/primitives'
 import EyeIcon from '@/components/icons/eye'
 import EditIcon from '@/components/icons/edit'
@@ -100,11 +100,9 @@ export default function RoomList() {
   )
 
   const sortedItems = useMemo(() => {
-    return [...items].sort((a: RoomsColumnProps, b: RoomsColumnProps) => {
-      const first = a[sortDescriptor.column as keyof RoomsColumnProps] as number
-      const second = b[
-        sortDescriptor.column as keyof RoomsColumnProps
-      ] as number
+    return [...items].sort((a: RoomColumnProps, b: RoomColumnProps) => {
+      const first = a[sortDescriptor.column as keyof RoomColumnProps] as number
+      const second = b[sortDescriptor.column as keyof RoomColumnProps] as number
       const cmp = first < second ? -1 : first > second ? 1 : 0
 
       return sortDescriptor.direction === 'descending' ? -cmp : cmp
@@ -186,7 +184,7 @@ export default function RoomList() {
   }, [page, pages])
 
   const columns: {
-    key: RoomsColumnProps
+    key: RoomColumnProps
     label: string
     sortable?: boolean
   }[] = useMemo(
@@ -202,7 +200,7 @@ export default function RoomList() {
   )
 
   const renderCell = useCallback(
-    (rooms: RoomsProps, columnKey: RoomsColumnProps) => {
+    (rooms: RoomProps, columnKey: RoomColumnProps) => {
       const cellValue = rooms[columnKey]
 
       switch (columnKey) {
@@ -307,11 +305,11 @@ export default function RoomList() {
               )}
             </TableHeader>
             <TableBody emptyContent={'No rows to display.'} items={sortedItems}>
-              {(item: RoomsProps) => (
+              {(item: RoomProps) => (
                 <TableRow key={item.id}>
                   {(columnKey) => (
                     <TableCell>
-                      {renderCell(item, columnKey as RoomsColumnProps)}
+                      {renderCell(item, columnKey as RoomColumnProps)}
                     </TableCell>
                   )}
                 </TableRow>

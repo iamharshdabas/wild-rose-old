@@ -12,7 +12,7 @@ import { Slider } from '@nextui-org/slider'
 import { useRef, useState } from 'react'
 import { Image } from '@nextui-org/image'
 
-import { RoomsCreateProps } from '@/types/room'
+import { RoomCreateProps } from '@/types/room'
 import { getRandomImage } from '@/config/images'
 
 export default function RoomCreate() {
@@ -20,14 +20,14 @@ export default function RoomCreate() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<RoomsCreateProps>()
+  } = useForm<RoomCreateProps>()
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const sliderValueRef = useRef(1500)
   const [imageSrc, setImageSrc] = useState(getRandomImage())
 
-  const onSubmit: SubmitHandler<RoomsCreateProps> = (data) => {
-    const room: RoomsCreateProps = {
+  const onSubmit: SubmitHandler<RoomCreateProps> = (data) => {
+    const room: RoomCreateProps = {
       name: data.name,
       price: sliderValueRef.current,
       image: imageSrc,
