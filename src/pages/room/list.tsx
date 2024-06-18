@@ -27,6 +27,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { ChangeEvent, useCallback, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 
+import RoomCreate from './create'
+
 import { RoomsColumnProps, RoomsProps } from '@/types/room'
 import { subtitle, title } from '@/config/primitives'
 import EyeIcon from '@/components/icons/eye'
@@ -136,6 +138,7 @@ export default function RoomList() {
             onClear={onClear}
             onValueChange={onSearchChange}
           />
+          <RoomCreate />
         </div>
         <div className="flex items-center justify-between">
           <span className="text-small text-default-400">

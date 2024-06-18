@@ -9,3 +9,9 @@ export type RoomsProps = {
 }
 
 export type RoomsColumnProps = keyof RoomsProps
+
+export type RoomsCreateProps = {
+  name: string
+  price: number
+  image: string
+}
