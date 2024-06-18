@@ -21,10 +21,11 @@ import {
   TableHeader,
   TableRow,
 } from '@nextui-org/table'
+import { cn } from '@nextui-org/theme'
 import { Tooltip } from '@nextui-org/tooltip'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { ChangeEvent, useCallback, useMemo, useState } from 'react'
-import { cn } from '@nextui-org/theme'
+import toast from 'react-hot-toast'
 
 import { RoomsColumnProps, RoomsProps } from '@/types/room'
 import { subtitle, title } from '@/config/primitives'
@@ -46,6 +47,10 @@ export default function RoomList() {
     mutationFn: (id: number) => deleteRooms(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['rooms'] })
+      toast.success('Room successfully deleted')
+    },
+    onError: (error) => {
+      toast.error(error.message)
     },
   })
 
