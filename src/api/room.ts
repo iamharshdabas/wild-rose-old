@@ -1,4 +1,5 @@
 import supabase from '@/config/supabase'
+import { RoomCreateProps } from '@/types/room'
 
 export async function getRooms() {
   const { data, error } = await supabase.from('rooms').select('*')
@@ -15,6 +16,17 @@ export async function deleteRooms(id: number) {
 
   if (error) {
     throw new Error(`${error}`)
+  }
+
+  return data
+}
+
+export async function createRoom(room: RoomCreateProps) {
+  console.log(room)
+  const { data, error } = await supabase.from('rooms').insert([room])
+
+  if (error) {
+    throw new Error(`${error.message}`)
   }
 
   return data

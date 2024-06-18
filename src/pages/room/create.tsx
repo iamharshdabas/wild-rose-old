@@ -1,5 +1,6 @@
-import { SubmitHandler, useForm } from 'react-hook-form'
 import { Button } from '@nextui-org/button'
+import { Image } from '@nextui-org/image'
+import { Input } from '@nextui-org/input'
 import {
   Modal,
   ModalBody,
@@ -7,24 +8,41 @@ import {
   ModalHeader,
   useDisclosure,
 } from '@nextui-org/modal'
-import { Input } from '@nextui-org/input'
 import { Slider } from '@nextui-org/slider'
 import { useRef, useState } from 'react'
-import { Image } from '@nextui-org/image'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import toast from 'react-hot-toast'
 
-import { RoomCreateProps } from '@/types/room'
+import { createRoom } from '@/api/room'
 import { getRandomImage } from '@/config/images'
+import { RoomCreateProps } from '@/types/room'
 
 export default function RoomCreate() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<RoomCreateProps>()
 
+  const queryClient = useQueryClient()
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const sliderValueRef = useRef(1500)
   const [imageSrc, setImageSrc] = useState(getRandomImage())
+
+  const { isPending, mutate } = useMutation({
+    mutationFn: (room: RoomCreateProps) => createRoom(room),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['rooms'] })
+      toast.success('Room successfully created')
+      reset()
+    },
+    onError: (error) => {
+      toast.error(error.message)
+      console.error(error.message)
+    },
+  })
 
   const onSubmit: SubmitHandler<RoomCreateProps> = (data) => {
     const room: RoomCreateProps = {
@@ -33,7 +51,7 @@ export default function RoomCreate() {
       image: imageSrc,
     }
 
-    console.log(room)
+    mutate(room)
   }
 
   const handleSliderChange = (value: number | number[]) => {
@@ -105,7 +123,7 @@ export default function RoomCreate() {
                     >
                       Close
                     </Button>
-                    <Button color="primary" type="submit">
+                    <Button color="primary" isLoading={isPending} type="submit">
                       Submit
                     </Button>
                   </div>
