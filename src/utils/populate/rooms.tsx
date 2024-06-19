@@ -14,8 +14,8 @@ import { Input } from '@nextui-org/input'
 import { useState } from 'react'
 
 import { getRandomImage } from '../getRandomImage'
-import incrementString from '../incrementString'
 import getRandomPrice from '../getRandomPrice'
+import incrementNumber from '../incrementNumber'
 
 import { RoomCreateProps } from '@/types/room'
 import { createRoom } from '@/api/room'
@@ -51,8 +51,10 @@ const PopulateRooms = () => {
     }
 
     for (let i = 0; i < parseInt(total, 10); i++) {
+      const incrementString = `${incrementNumber({ increment: i })}`
+
       const room: RoomCreateProps = {
-        name: incrementString(0, i + 1, 8),
+        name: incrementString,
         price: getRandomPrice(sliderMin, sliderMax, parseInt(step, 10)),
         image: getRandomImage(),
       }
