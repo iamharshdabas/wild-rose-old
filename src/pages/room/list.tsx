@@ -13,7 +13,6 @@ import {
 import { Pagination } from '@nextui-org/pagination'
 import { Spinner } from '@nextui-org/spinner'
 import {
-  SortDescriptor,
   Table,
   TableBody,
   TableCell,
@@ -62,10 +61,6 @@ export default function RoomList() {
   const [filterValue, setFilterValue] = useState('')
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [page, setPage] = useState(1)
-  const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
-    column: 'id',
-    direction: 'ascending',
-  })
 
   const hasSearchFilter = Boolean(filterValue)
 
@@ -99,16 +94,6 @@ export default function RoomList() {
     },
     []
   )
-
-  const sortedItems = useMemo(() => {
-    return [...items].sort((a: RoomColumnProps, b: RoomColumnProps) => {
-      const first = a[sortDescriptor.column as keyof RoomColumnProps] as number
-      const second = b[sortDescriptor.column as keyof RoomColumnProps] as number
-      const cmp = first < second ? -1 : first > second ? 1 : 0
-
-      return sortDescriptor.direction === 'descending' ? -cmp : cmp
-    })
-  }, [sortDescriptor, items])
 
   const onSearchChange = useCallback((value?: string) => {
     if (value) {
@@ -190,14 +175,13 @@ export default function RoomList() {
   const columns: {
     key: RoomColumnProps
     label: string
-    sortable?: boolean
   }[] = useMemo(
     () => [
       { key: 'image', label: 'Image' },
-      { key: 'id', label: 'ID', sortable: true },
-      { key: 'created_at', label: 'Created At', sortable: true },
-      { key: 'name', label: 'Name', sortable: true },
-      { key: 'price', label: 'Price', sortable: true },
+      { key: 'id', label: 'ID' },
+      { key: 'created_at', label: 'Created At' },
+      { key: 'name', label: 'Name' },
+      { key: 'price', label: 'Price' },
       { key: 'actions', label: 'Actions' },
     ],
     []
@@ -292,23 +276,20 @@ export default function RoomList() {
             aria-label="rooms table"
             bottomContent={bottomContent}
             bottomContentPlacement="outside"
-            sortDescriptor={sortDescriptor}
             topContent={topContent}
             topContentPlacement="outside"
-            onSortChange={setSortDescriptor}
           >
             <TableHeader columns={columns}>
               {(column) => (
                 <TableColumn
                   key={column.key}
-                  allowsSorting={column.sortable}
                   className={cn(subtitle(), 'text-center')}
                 >
                   {column.label}
                 </TableColumn>
               )}
             </TableHeader>
-            <TableBody emptyContent={'No rows to display.'} items={sortedItems}>
+            <TableBody emptyContent={'No rows to display.'} items={items}>
               {(item: RoomProps) => (
                 <TableRow key={item.id}>
                   {(columnKey) => (
