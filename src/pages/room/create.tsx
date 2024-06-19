@@ -111,7 +111,7 @@ export default function RoomCreate() {
                       src={imageSrc}
                       width={1536}
                     />
-                    <Button onClick={handleImageChange}>
+                    <Button onPress={handleImageChange}>
                       Get Random Image
                     </Button>
                   </div>

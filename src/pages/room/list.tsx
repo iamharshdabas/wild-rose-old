@@ -249,7 +249,7 @@ export default function RoomList() {
                   color="danger"
                   disabled={isPending}
                   variant="light"
-                  onClick={() => mutate(rooms.id)}
+                  onPress={() => mutate(rooms.id)}
                 >
                   <DeleteIcon />
                 </Button>
