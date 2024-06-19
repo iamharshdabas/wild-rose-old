@@ -15,7 +15,10 @@ const incrementNumber = ({ initial = 1, increment = 1, threshold = 8 }) => {
   let number = initial + increment
   const firstDigit = calculateThresholdIncrements(initial, increment, threshold)
 
-  if (number > threshold) {
+  const thresholdOverflow =
+    parseInt(inputString.slice(-threshold.toString().length), 10) > threshold
+
+  if (number > threshold && thresholdOverflow) {
     number = number % threshold
 
     if (number === 0) {
