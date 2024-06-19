@@ -15,8 +15,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 
 import { createRoom } from '@/api/room'
-import { getRandomImage } from '@/config/images'
 import { RoomCreateProps } from '@/types/room'
+import { getRandomImage } from '@/utils/getRandomImage'
 
 export default function RoomCreate() {
   const {
@@ -32,7 +32,7 @@ export default function RoomCreate() {
   const [imageSrc, setImageSrc] = useState(getRandomImage())
 
   const { isPending, mutate } = useMutation({
-    mutationFn: (room: RoomCreateProps) => createRoom(room),
+    mutationFn: (room: RoomCreateProps[]) => createRoom(room),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['rooms'] })
       toast.success('Room successfully created')
@@ -40,16 +40,17 @@ export default function RoomCreate() {
     },
     onError: (error) => {
       toast.error(error.message)
-      console.error(error.message)
     },
   })
 
   const onSubmit: SubmitHandler<RoomCreateProps> = (data) => {
-    const room: RoomCreateProps = {
-      name: data.name,
-      price: sliderValueRef.current,
-      image: imageSrc,
-    }
+    const room: RoomCreateProps[] = [
+      {
+        name: data.name,
+        price: sliderValueRef.current,
+        image: imageSrc,
+      },
+    ]
 
     mutate(room)
   }

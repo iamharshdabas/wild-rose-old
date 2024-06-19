@@ -36,6 +36,7 @@ import EditIcon from '@/components/icons/edit'
 import DeleteIcon from '@/components/icons/delete'
 import { SearchIcon } from '@/components/icons'
 import { deleteRooms, getRooms } from '@/api/room'
+import PopulateRooms from '@/utils/populate/rooms'
 
 export default function RoomList() {
   const queryClient = useQueryClient()
@@ -136,7 +137,10 @@ export default function RoomList() {
             onClear={onClear}
             onValueChange={onSearchChange}
           />
-          <RoomCreate />
+          <div className="space-x-4">
+            <PopulateRooms />
+            <RoomCreate />
+          </div>
         </div>
         <div className="flex items-center justify-between">
           <span className="text-small text-default-400">

@@ -21,9 +21,8 @@ export async function deleteRooms(id: number) {
   return data
 }
 
-export async function createRoom(room: RoomCreateProps) {
-  console.log(room)
-  const { data, error } = await supabase.from('rooms').insert([room])
+export async function createRoom(room: RoomCreateProps[]) {
+  const { data, error } = await supabase.from('rooms').insert(room)
 
   if (error) {
     throw new Error(`${error.message}`)
