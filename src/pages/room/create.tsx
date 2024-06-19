@@ -88,17 +88,18 @@ export default function RoomCreate() {
                     {...register('name', { required: true })}
                   />
                   <div>
+                    {/* TODO: set minValue from settings using api */}
                     <Slider
                       showTooltip
                       defaultValue={sliderValueRef.current}
-                      formatOptions={{ style: 'currency', currency: 'USD' }}
+                      formatOptions={{ style: 'currency', currency: 'INR' }}
                       label="Price"
                       maxValue={2000}
                       minValue={1000}
                       step={25}
                       tooltipValueFormatOptions={{
                         style: 'currency',
-                        currency: 'USD',
+                        currency: 'INR',
                       }}
                       onChange={handleSliderChange}
                     />

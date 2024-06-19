@@ -107,7 +107,7 @@ const PopulateRooms = () => {
                   <div>
                     <Slider
                       defaultValue={[2000, 4000]}
-                      formatOptions={{ style: 'currency', currency: 'USD' }}
+                      formatOptions={{ style: 'currency', currency: 'INR' }}
                       label="Price Range"
                       maxValue={10000}
                       minValue={1000}
@@ -118,7 +118,7 @@ const PopulateRooms = () => {
                     <p>
                       Selected budget:{' '}
                       {Array.isArray(sliderRange) &&
-                        sliderRange.map((x) => `$${x}`).join(' – ')}
+                        sliderRange.map((x) => `₹${x}`).join(' – ')}
                     </p>
                   </div>
                 </form>
