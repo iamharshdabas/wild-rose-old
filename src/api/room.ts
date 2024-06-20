@@ -1,8 +1,11 @@
 import supabase from '@/config/supabase'
-import { RoomCreateProps } from '@/types/room'
+import { RoomCreateProps, RoomProps } from '@/types/room'
 
-export async function getRooms() {
-  const { data, error } = await supabase.from('rooms').select('*')
+export async function getRooms(): Promise<RoomProps[]> {
+  const { data, error } = await supabase
+    .from('rooms')
+    .select('*')
+    .order('name', { ascending: true })
 
   if (error) {
     throw new Error(`${error}`)

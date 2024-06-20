@@ -2,38 +2,53 @@ const padNumberWithLeadingZeros = (number: number, length: number) => {
   return number.toString().padStart(length, '0')
 }
 
-const calculateThresholdIncrements = (
-  initial: number,
-  increment: number,
+const calculateThresholdIncrement = (
+  inputString: string,
+  firstDigit: number,
+  number: number,
   threshold: number
 ) => {
-  return Math.floor((initial + increment - 1) / threshold)
+  number = number % threshold
+
+  if (number === 0) {
+    number = threshold
+  }
+
+  return parseInt(
+    `${firstDigit}${padNumberWithLeadingZeros(
+      number,
+      Math.max(inputString.length, 2)
+    )}`,
+    10
+  )
 }
 
-const incrementNumber = ({ initial = 1, increment = 1, threshold = 8 }) => {
+const incrementNumber = ({ initial = 0, increment = 1, threshold = 4 }) => {
   const inputString = initial.toString()
   let number = initial + increment
-  const firstDigit = calculateThresholdIncrements(initial, increment, threshold)
+  const firstDigit = Math.floor((initial + increment - 1) / threshold)
 
-  const thresholdOverflow =
-    parseInt(inputString.slice(-threshold.toString().length), 10) > threshold
+  if (inputString.length > 1) {
+    const thresholdOverflow = parseInt(inputString.slice(1), 10) > threshold
 
-  if (number > threshold && thresholdOverflow) {
-    number = number % threshold
-
-    if (number === 0) {
-      number = threshold
-    }
-
-    number = parseInt(
-      `${firstDigit}${padNumberWithLeadingZeros(
+    if (number > threshold && thresholdOverflow) {
+      number = calculateThresholdIncrement(
+        inputString,
+        firstDigit,
         number,
-        Math.max(inputString.length, 2)
-      )}`
+        threshold
+      )
+    }
+  } else if (number > threshold) {
+    number = calculateThresholdIncrement(
+      inputString,
+      firstDigit,
+      number,
+      threshold
     )
   }
 
-  return number
+  return parseInt(number.toString(), 10) // NOTE: if threshold is reached. number is converted to string for formatting.
 }
 
 export default incrementNumber

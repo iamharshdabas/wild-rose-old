@@ -27,6 +27,7 @@ import { ChangeEvent, useCallback, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 
 import RoomCreate from './create'
+import RoomPopulate from './populate'
 
 import { RoomColumnProps, RoomProps } from '@/types/room'
 import { subtitle, title } from '@/config/primitives'
@@ -35,7 +36,6 @@ import EditIcon from '@/components/icons/edit'
 import DeleteIcon from '@/components/icons/delete'
 import { SearchIcon } from '@/components/icons'
 import { deleteRooms, getRooms } from '@/api/room'
-import PopulateRooms from '@/utils/populate/rooms'
 
 export default function RoomList() {
   const queryClient = useQueryClient()
@@ -71,7 +71,7 @@ export default function RoomList() {
 
     if (hasSearchFilter) {
       filteredRooms = filteredRooms.filter((room) =>
-        room.name.toLowerCase().includes(filterValue.toLowerCase())
+        room.name.toString().toLowerCase().includes(filterValue.toLowerCase())
       )
     }
 
@@ -123,8 +123,8 @@ export default function RoomList() {
             onValueChange={onSearchChange}
           />
           <div className="space-x-4">
-            <PopulateRooms />
-            <RoomCreate />
+            <RoomPopulate />
+            <RoomCreate setPage={setPage} />
           </div>
         </div>
         <div className="flex items-center justify-between">

@@ -13,19 +13,18 @@ import { Slider, SliderValue } from '@nextui-org/slider'
 import { Input } from '@nextui-org/input'
 import { useState } from 'react'
 
-import { getRandomImage } from '../getRandomImage'
-import getRandomPrice from '../getRandomPrice'
-import incrementNumber from '../incrementNumber'
-
 import { RoomCreateProps } from '@/types/room'
 import { createRoom } from '@/api/room'
+import incrementNumber from '@/utils/incrementNumber'
+import { getRandomImage } from '@/utils/getRandomImage'
+import getRandomPrice from '@/utils/getRandomPrice'
 
-const PopulateRooms = () => {
+const RoomPopulate = () => {
   const queryClient = useQueryClient()
   const [sliderRange, setSliderRange] = useState<SliderValue>([2000, 8000])
   const [threshold, setThreshold] = useState('8')
   const [step, setStep] = useState('250')
-  const [total, setTotal] = useState('40')
+  const [total, setTotal] = useState('20')
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
   const { mutate } = useMutation({
@@ -51,10 +50,8 @@ const PopulateRooms = () => {
     }
 
     for (let i = 0; i < parseInt(total, 10); i++) {
-      const incrementString = `${incrementNumber({ increment: i })}`
-
       const room: RoomCreateProps = {
-        name: incrementString,
+        name: incrementNumber({ increment: i + 1 }),
         price: getRandomPrice(sliderMin, sliderMax, parseInt(step, 10)),
         image: getRandomImage(),
       }
@@ -147,4 +144,4 @@ const PopulateRooms = () => {
   )
 }
 
-export default PopulateRooms
+export default RoomPopulate

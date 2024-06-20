@@ -9,8 +9,8 @@ import {
   useDisclosure,
 } from '@nextui-org/modal'
 import { Slider } from '@nextui-org/slider'
-import { useRef, useState } from 'react'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { Dispatch, SetStateAction, useRef, useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 
@@ -18,7 +18,11 @@ import { createRoom } from '@/api/room'
 import { RoomCreateProps } from '@/types/room'
 import { getRandomImage } from '@/utils/getRandomImage'
 
-export default function RoomCreate() {
+export default function RoomCreate({
+  setPage,
+}: {
+  setPage: Dispatch<SetStateAction<number>>
+}) {
   const {
     register,
     handleSubmit,
@@ -43,18 +47,6 @@ export default function RoomCreate() {
     },
   })
 
-  const onSubmit: SubmitHandler<RoomCreateProps> = (data) => {
-    const room: RoomCreateProps[] = [
-      {
-        name: data.name,
-        price: sliderValueRef.current,
-        image: imageSrc,
-      },
-    ]
-
-    mutate(room)
-  }
-
   const handleSliderChange = (value: number | number[]) => {
     if (typeof value === 'number') {
       sliderValueRef.current = value
@@ -78,7 +70,22 @@ export default function RoomCreate() {
                 Create Room
               </ModalHeader>
               <ModalBody>
-                <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+                <form
+                  className="space-y-4"
+                  onSubmit={handleSubmit((data) => {
+                    const room: RoomCreateProps[] = [
+                      {
+                        name: data.name,
+                        price: sliderValueRef.current,
+                        image: imageSrc,
+                      },
+                    ]
+
+                    setPage(1)
+                    mutate(room)
+                    onClose()
+                  })}
+                >
                   <Input
                     isRequired
                     errorMessage="This field is required"
