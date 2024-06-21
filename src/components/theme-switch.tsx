@@ -1,9 +1,8 @@
-import { FC, useState, useEffect } from 'react'
-import { VisuallyHidden } from '@react-aria/visually-hidden'
 import { SwitchProps, useSwitch } from '@nextui-org/switch'
+import { VisuallyHidden } from '@react-aria/visually-hidden'
 import clsx from 'clsx'
-
-import { MoonIcon, SunIcon } from './icons'
+import { FC, useEffect, useState } from 'react'
+import { Moon, Sun } from 'lucide-react'
 
 import { useTheme } from '@/hooks/use-theme'
 
@@ -73,7 +72,7 @@ export const ThemeSwitch: FC<ThemeSwitchProps> = ({
           ),
         })}
       >
-        {isSelected ? <SunIcon /> : <MoonIcon />}
+        {isSelected ? <Sun /> : <Moon />}
       </div>
     </Component>
   )

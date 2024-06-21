@@ -1,22 +1,24 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import toast from 'react-hot-toast'
 import { Button } from '@nextui-org/button'
+import { Input } from '@nextui-org/input'
 import {
   Modal,
+  ModalBody,
   ModalContent,
   ModalHeader,
-  ModalBody,
   useDisclosure,
 } from '@nextui-org/modal'
 import { Slider, SliderValue } from '@nextui-org/slider'
-import { Input } from '@nextui-org/input'
-import { useForm, Controller } from 'react-hook-form'
+import { useQueryClient } from '@tanstack/react-query'
+import { Controller, useForm } from 'react-hook-form'
+import { cn } from '@nextui-org/theme'
 
-import { RoomCreateProps } from '@/types/room'
-import { createRoom } from '@/api/room'
 import incrementNumber from '@/utils/incrementNumber'
-import { getRandomImage } from '@/utils/getRandomImage'
 import getRandomPrice from '@/utils/getRandomPrice'
+import getRandomImage from '@/utils/getRandomImage'
+import { RoomCreateProps } from '@/types/room'
+import { siteConfig } from '@/config/site'
+import useCreateRoomMutation from '@/hooks/rooms/useCreateRoomMutation'
+import { subtitle } from '@/config/primitives'
 
 interface PopulateRoomProps {
   totalRooms: number
@@ -28,14 +30,9 @@ interface PopulateRoomProps {
 const RoomPopulate = () => {
   const queryClient = useQueryClient()
 
-  const { mutate, isPending } = useMutation({
-    mutationFn: (room: RoomCreateProps[]) => createRoom(room),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['rooms'] })
-      toast.success('Rooms successfully populated')
-    },
-    onError: (error) => {
-      toast.error(error.message)
+  const { mutate, isPending } = useCreateRoomMutation({
+    onSuccess() {
+      queryClient.invalidateQueries({ queryKey: [siteConfig.queryKey.rooms] })
     },
   })
 
@@ -95,8 +92,11 @@ const RoomPopulate = () => {
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">
+              <ModalHeader className="flex flex-col">
                 Populate rooms
+                <span className={cn(subtitle(), 'text-danger')}>
+                  Only use this if there are no rooms inside the database
+                </span>
               </ModalHeader>
               <ModalBody>
                 <form
@@ -176,7 +176,7 @@ const RoomPopulate = () => {
                       </div>
                     )}
                   />
-                  <div className="flex justify-end gap-1 py-2">
+                  <div className="flex justify-end gap-2 py-2">
                     <Button
                       color="danger"
                       type="reset"

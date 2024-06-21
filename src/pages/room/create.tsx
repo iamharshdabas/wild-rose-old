@@ -9,35 +9,30 @@ import {
   useDisclosure,
 } from '@nextui-org/modal'
 import { Slider } from '@nextui-org/slider'
-import { useState, useEffect } from 'react'
-import { useForm, Controller } from 'react-hook-form'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import toast from 'react-hot-toast'
+import { useQueryClient } from '@tanstack/react-query'
+import { useEffect, useState } from 'react'
+import { Controller, useForm } from 'react-hook-form'
 
-import { createRoom, getLastRoom } from '@/api/room'
-import { RoomCreateProps } from '@/types/room'
-import { getRandomImage } from '@/utils/getRandomImage'
 import incrementNumber from '@/utils/incrementNumber'
 import getRandomPrice from '@/utils/getRandomPrice'
+import getRandomImage from '@/utils/getRandomImage'
+import { RoomCreateProps } from '@/types/room'
+import useGetLastRoomQuery from '@/hooks/rooms/useGetLastRoomQuery'
+import useCreateRoomMutation from '@/hooks/rooms/useCreateRoomMutation'
+import { siteConfig } from '@/config/site'
 
-export default function RoomCreate() {
+const RoomCreate = () => {
   const queryClient = useQueryClient()
 
-  const { data: lastRoom } = useQuery({
-    queryKey: ['last_room'],
-    queryFn: getLastRoom,
-  })
+  const { data: lastRoom } = useGetLastRoomQuery()
 
-  const { isPending, mutate } = useMutation({
-    mutationFn: (room: RoomCreateProps[]) => createRoom(room),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['rooms'] })
-      queryClient.invalidateQueries({ queryKey: ['last_room'] })
-      toast.success('Room successfully created')
+  const { mutate, isPending } = useCreateRoomMutation({
+    onSuccess() {
+      queryClient.invalidateQueries({ queryKey: [siteConfig.queryKey.rooms] })
+      queryClient.invalidateQueries({
+        queryKey: [siteConfig.queryKey.lastRoom],
+      })
       reset(defaultValues)
-    },
-    onError: (error) => {
-      toast.error(error.message)
     },
   })
 
@@ -83,9 +78,7 @@ export default function RoomCreate() {
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">
-                Create Room
-              </ModalHeader>
+              <ModalHeader className="flex flex-col">Create Room</ModalHeader>
               <ModalBody>
                 <form
                   className="space-y-4"
@@ -152,7 +145,7 @@ export default function RoomCreate() {
                       Get Random Image
                     </Button>
                   </div>
-                  <div className="flex justify-end gap-1 py-2">
+                  <div className="flex justify-end gap-2 py-2">
                     <Button
                       color="danger"
                       type="reset"
@@ -174,3 +167,5 @@ export default function RoomCreate() {
     </>
   )
 }
+
+export default RoomCreate

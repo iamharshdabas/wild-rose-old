@@ -41,5 +41,6 @@ export const images = [
   'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms/zdePKdECjJh2NwPt29_Et.png',
 ]
 
-export const getRandomImage = () =>
-  images[Math.floor(Math.random() * images.length)]
+const getRandomImage = () => images[Math.floor(Math.random() * images.length)]
+
+export default getRandomImage

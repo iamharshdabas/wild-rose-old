@@ -8,27 +8,33 @@ import {
   NavbarMenuToggle,
   Navbar as NextUINavbar,
 } from '@nextui-org/navbar'
-import { link } from '@nextui-org/theme'
-import clsx from 'clsx'
+import { cn } from '@nextui-org/theme'
 import { NavLink } from 'react-router-dom'
+import { useState } from 'react'
+import { Tent } from 'lucide-react'
 
-import { LogoIcon } from './icons'
-
-import { ThemeSwitch } from '@/components/theme-switch'
 import { siteConfig } from '@/config/site'
+import { ThemeSwitch } from '@/components/theme-switch'
 
 export const Navbar = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+
   return (
-    <NextUINavbar maxWidth="xl" position="sticky">
+    <NextUINavbar
+      isMenuOpen={isMenuOpen}
+      maxWidth="xl"
+      position="sticky"
+      onMenuOpenChange={setIsMenuOpen}
+    >
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
         <NavbarMenuToggle className="sm:hidden" />
-        <NavbarBrand className="max-w-fit gap-3">
+        <NavbarBrand className="max-w-fit">
           <NavLink
-            className="flex items-center justify-start gap-1"
+            className="flex items-center justify-start gap-2"
             color="foreground"
             to="/"
           >
-            <LogoIcon />
+            <Tent />
             <p className="font-bold text-inherit">Wild Rose</p>
           </NavLink>
         </NavbarBrand>
@@ -36,12 +42,7 @@ export const Navbar = () => {
           {siteConfig.navItems.map((item) => (
             <NavbarItem key={item.href}>
               <NavLink
-                className={({ isActive }) =>
-                  clsx(
-                    link({ color: 'foreground' }),
-                    isActive ? 'font-medium text-primary' : ''
-                  )
-                }
+                className={({ isActive }) => cn(isActive && 'text-primary')}
                 color="foreground"
                 to={item.href}
               >
@@ -63,19 +64,21 @@ export const Navbar = () => {
       </NavbarContent>
 
       <NavbarMenu>
-        <div className="mx-4 mt-2 flex flex-col gap-2">
+        <div className="m-4 flex flex-col gap-4">
           {siteConfig.navMenuItems.map((item, index) => (
             <NavbarMenuItem key={`${item.label}-${item.href}`}>
               <NavLink
                 className={({ isActive }) =>
-                  clsx(
+                  cn(
+                    'text-4xl font-bold',
                     index === siteConfig.navMenuItems.length - 1 &&
-                      link({ color: 'danger' }),
-                    isActive ? 'font-medium text-primary' : ''
+                      'text-danger',
+                    isActive && 'text-primary'
                   )
                 }
                 color="foreground"
                 to={item.href}
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
               >
                 {item.label}
               </NavLink>

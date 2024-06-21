@@ -1,4 +1,10 @@
 import { Avatar } from '@nextui-org/avatar'
+import {
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+} from '@nextui-org/dropdown'
 import { Button } from '@nextui-org/button'
 import { Image } from '@nextui-org/image'
 import { Input } from '@nextui-org/input'
@@ -22,38 +28,30 @@ import {
 } from '@nextui-org/table'
 import { cn } from '@nextui-org/theme'
 import { Tooltip } from '@nextui-org/tooltip'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 import { ChangeEvent, useCallback, useMemo, useState } from 'react'
-import toast from 'react-hot-toast'
+import { Edit, EllipsisVertical, Eye, Search, Trash } from 'lucide-react'
 
 import RoomCreate from './create'
 import RoomPopulate from './populate'
 
 import { RoomColumnProps, RoomProps } from '@/types/room'
 import { subtitle, title } from '@/config/primitives'
-import EyeIcon from '@/components/icons/eye'
-import EditIcon from '@/components/icons/edit'
-import DeleteIcon from '@/components/icons/delete'
-import { SearchIcon } from '@/components/icons'
-import { deleteRooms, getRooms } from '@/api/room'
+import useGetRoomsQuery from '@/hooks/rooms/useGetRoomsQuery'
+import useDeleteRoomMutation from '@/hooks/rooms/useDeleteRoomMutation'
+import { siteConfig } from '@/config/site'
 
-export default function RoomList() {
+const RoomList = () => {
   const queryClient = useQueryClient()
 
-  const { data: rooms, isLoading } = useQuery({
-    queryKey: ['rooms'],
-    queryFn: getRooms,
-  })
+  const { data: rooms, isLoading } = useGetRoomsQuery()
 
-  const { isPending, mutate } = useMutation({
-    mutationFn: (id: number) => deleteRooms(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['rooms'] })
-      queryClient.invalidateQueries({ queryKey: ['last_room'] })
-      toast.success('Room successfully deleted')
-    },
-    onError: (error) => {
-      toast.error(error.message)
+  const { mutate, isPending } = useDeleteRoomMutation({
+    onSuccess() {
+      queryClient.invalidateQueries({ queryKey: [siteConfig.queryKey.rooms] })
+      queryClient.invalidateQueries({
+        queryKey: [siteConfig.queryKey.lastRoom],
+      })
     },
   })
 
@@ -113,18 +111,18 @@ export default function RoomList() {
   const topContent = useMemo(() => {
     return (
       <div className="flex flex-col gap-4">
-        <div className="flex items-end justify-between gap-4">
+        <div className="flex flex-col justify-between gap-4 sm:flex-row">
           <Input
             isClearable
             className="w-full sm:max-w-[44%]"
             placeholder="Search by name..."
-            startContent={<SearchIcon />}
+            startContent={<Search />}
             value={filterValue}
             onClear={onClear}
             onValueChange={onSearchChange}
           />
-          <div className="space-x-4">
-            {items.length === 0 && <RoomPopulate />}
+          <div className="flex justify-end gap-4">
+            <RoomPopulate />
             <RoomCreate />
           </div>
         </div>
@@ -233,29 +231,52 @@ export default function RoomList() {
           )
         case 'actions': // TODO: onClick CRUD operations
           return (
-            <div className="relative flex items-center justify-center gap-2">
-              <Tooltip content="Details">
-                <span className="cursor-pointer text-lg text-default-400 active:opacity-50">
-                  <EyeIcon />
-                </span>
-              </Tooltip>
-              <Tooltip content="Edit room">
-                <span className="cursor-pointer text-lg text-default-400 active:opacity-50">
-                  <EditIcon />
-                </span>
-              </Tooltip>
-              <Tooltip color="danger" content="Delete room">
-                <Button
-                  isIconOnly
-                  color="danger"
-                  disabled={isPending}
-                  variant="light"
-                  onPress={() => mutate(rooms.id)}
-                >
-                  <DeleteIcon />
-                </Button>
-              </Tooltip>
-            </div>
+            <>
+              <div className="relative hidden items-center justify-center gap-2 sm:flex">
+                <Tooltip content="Details">
+                  <span className="cursor-pointer text-lg text-default-400 active:opacity-50">
+                    <Eye />
+                  </span>
+                </Tooltip>
+                <Tooltip content="Edit room">
+                  <span className="cursor-pointer text-lg text-default-400 active:opacity-50">
+                    <Edit />
+                  </span>
+                </Tooltip>
+                <Tooltip color="danger" content="Delete room">
+                  <Button
+                    isIconOnly
+                    color="danger"
+                    disabled={isPending}
+                    variant="light"
+                    onPress={() => mutate(rooms.id)}
+                  >
+                    <Trash />
+                  </Button>
+                </Tooltip>
+              </div>
+              <div className="relative flex items-center justify-center gap-2 sm:hidden">
+                <Dropdown>
+                  <DropdownTrigger>
+                    <Button isIconOnly size="sm" variant="light">
+                      <EllipsisVertical />
+                    </Button>
+                  </DropdownTrigger>
+                  <DropdownMenu>
+                    <DropdownItem startContent={<Eye />}>View</DropdownItem>
+                    <DropdownItem startContent={<Edit />}>Edit</DropdownItem>
+                    <DropdownItem
+                      className="text-danger"
+                      color="danger"
+                      startContent={<Trash />}
+                      onPress={() => mutate(rooms.id)}
+                    >
+                      Delete
+                    </DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
+              </div>
+            </>
           )
         default:
           return cellValue
@@ -307,7 +328,7 @@ export default function RoomList() {
           <ModalContent>
             {(onClose) => (
               <>
-                <ModalHeader className="flex flex-col gap-1">Room</ModalHeader>
+                <ModalHeader className="flex flex-col">Room</ModalHeader>
                 <ModalBody>
                   <Image
                     isBlurred
@@ -336,3 +357,5 @@ export default function RoomList() {
     </>
   )
 }
+
+export default RoomList
