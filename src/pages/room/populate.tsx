@@ -6,12 +6,11 @@ import {
   ModalContent,
   ModalHeader,
   ModalBody,
-  ModalFooter,
   useDisclosure,
 } from '@nextui-org/modal'
 import { Slider, SliderValue } from '@nextui-org/slider'
 import { Input } from '@nextui-org/input'
-import { useState } from 'react'
+import { useForm, Controller } from 'react-hook-form'
 
 import { RoomCreateProps } from '@/types/room'
 import { createRoom } from '@/api/room'
@@ -19,15 +18,17 @@ import incrementNumber from '@/utils/incrementNumber'
 import { getRandomImage } from '@/utils/getRandomImage'
 import getRandomPrice from '@/utils/getRandomPrice'
 
+interface PopulateRoomProps {
+  totalRooms: number
+  priceStep: number
+  threshold: number
+  sliderRange: SliderValue
+}
+
 const RoomPopulate = () => {
   const queryClient = useQueryClient()
-  const [sliderRange, setSliderRange] = useState<SliderValue>([2000, 8000])
-  const [threshold, setThreshold] = useState('8')
-  const [step, setStep] = useState('250')
-  const [total, setTotal] = useState('20')
-  const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: (room: RoomCreateProps[]) => createRoom(room),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['rooms'] })
@@ -38,8 +39,25 @@ const RoomPopulate = () => {
     },
   })
 
-  const populate = () => {
+  const { isOpen, onOpen, onOpenChange } = useDisclosure()
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors },
+    getValues,
+  } = useForm<PopulateRoomProps>({
+    defaultValues: {
+      sliderRange: [2000, 8000] as SliderValue,
+      threshold: 8,
+      priceStep: 250,
+      totalRooms: 20,
+    },
+  })
+
+  const onSubmit = (data: PopulateRoomProps) => {
     const rooms: RoomCreateProps[] = []
+    const { sliderRange, priceStep, totalRooms } = data
 
     let sliderMin: number, sliderMax: number
 
@@ -49,10 +67,10 @@ const RoomPopulate = () => {
       sliderMin = sliderMax = sliderRange as number
     }
 
-    for (let i = 0; i < parseInt(total, 10); i++) {
+    for (let i = 0; i < totalRooms; i++) {
       const room: RoomCreateProps = {
-        name: incrementNumber({ increment: i + 1 }),
-        price: getRandomPrice(sliderMin, sliderMax, parseInt(step, 10)),
+        name: incrementNumber({ increment: i }),
+        price: getRandomPrice(sliderMin, sliderMax, priceStep),
         image: getRandomImage(),
       }
 
@@ -64,7 +82,13 @@ const RoomPopulate = () => {
 
   return (
     <>
-      <Button variant="ghost" onPress={onOpen}>
+      <Button
+        variant="ghost"
+        onPress={() => {
+          onOpen()
+          reset()
+        }}
+      >
         Populate rooms
       </Button>
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
@@ -75,67 +99,98 @@ const RoomPopulate = () => {
                 Populate rooms
               </ModalHeader>
               <ModalBody>
-                <form>
-                  <Input
-                    isRequired
-                    description="Total number of rooms to populate."
-                    errorMessage="This field is required"
-                    label="Total rooms"
-                    type="number"
-                    value={total}
-                    onValueChange={setTotal}
+                <form
+                  onSubmit={handleSubmit((data) => {
+                    onSubmit(data)
+                    onClose()
+                  })}
+                >
+                  <Controller
+                    control={control}
+                    name="totalRooms"
+                    render={({ field }) => (
+                      <Input
+                        {...field}
+                        isRequired
+                        description="Total number of rooms to populate."
+                        errorMessage={errors.totalRooms?.message}
+                        label="Total rooms"
+                        type="number"
+                        value={field.value.toString()}
+                      />
+                    )}
+                    rules={{ required: 'This field is required' }}
                   />
-                  <Input
-                    isRequired
-                    description="Threshold value of room names."
-                    errorMessage="This field is required"
-                    label="Threshold"
-                    type="number"
-                    value={threshold}
-                    onValueChange={setThreshold}
+                  <Controller
+                    control={control}
+                    name="threshold"
+                    render={({ field }) => (
+                      <Input
+                        {...field}
+                        isRequired
+                        description="Threshold value of room names."
+                        errorMessage={errors.threshold?.message}
+                        label="Threshold"
+                        type="number"
+                        value={field.value.toString()}
+                      />
+                    )}
+                    rules={{ required: 'This field is required' }}
                   />
-                  <Input
-                    isRequired
-                    description="Steps for price range."
-                    errorMessage="This field is required"
-                    label="Steps"
-                    type="number"
-                    value={step}
-                    onValueChange={setStep}
+                  <Controller
+                    control={control}
+                    name="priceStep"
+                    render={({ field }) => (
+                      <Input
+                        {...field}
+                        isRequired
+                        description="Steps for price range."
+                        errorMessage={errors.priceStep?.message}
+                        label="Steps"
+                        type="number"
+                        value={field.value.toString()}
+                      />
+                    )}
+                    rules={{ required: 'This field is required' }}
                   />
-                  <div>
-                    <Slider
-                      defaultValue={[2000, 4000]}
-                      formatOptions={{ style: 'currency', currency: 'INR' }}
-                      label="Price Range"
-                      maxValue={10000}
-                      minValue={1000}
-                      step={parseInt(step, 10)}
-                      value={sliderRange}
-                      onChange={setSliderRange}
-                    />
-                    <p>
-                      Selected budget:{' '}
-                      {Array.isArray(sliderRange) &&
-                        sliderRange.map((x) => `₹${x}`).join(' – ')}
-                    </p>
+                  <Controller
+                    control={control}
+                    name="sliderRange"
+                    render={({ field }) => (
+                      <div>
+                        <Slider
+                          {...field}
+                          showTooltip
+                          formatOptions={{ style: 'currency', currency: 'INR' }}
+                          label="Price Range"
+                          maxValue={10000}
+                          minValue={1000}
+                          step={getValues('priceStep')}
+                          onChange={field.onChange}
+                        />
+                        <p>
+                          Selected budget:{' '}
+                          {Array.isArray(field.value) &&
+                            field.value.map((x) => `₹${x}`).join(' – ')}
+                        </p>
+                      </div>
+                    )}
+                  />
+                  <div className="flex justify-end gap-1 py-2">
+                    <Button
+                      color="danger"
+                      type="reset"
+                      variant="light"
+                      onPress={onClose}
+                    >
+                      Close
+                    </Button>
+                    <Button color="primary" isLoading={isPending} type="submit">
+                      Submit
+                    </Button>
                   </div>
                 </form>
               </ModalBody>
-              <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
-                  Close
-                </Button>
-                <Button
-                  color="primary"
-                  onPress={() => {
-                    populate()
-                    onClose()
-                  }}
-                >
-                  Populate
-                </Button>
-              </ModalFooter>
             </>
           )}
         </ModalContent>

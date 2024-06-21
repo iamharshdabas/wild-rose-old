@@ -14,6 +14,21 @@ export async function getRooms(): Promise<RoomProps[]> {
   return data
 }
 
+export async function getLastRoom(): Promise<RoomProps> {
+  const { data, error } = await supabase
+    .from('rooms')
+    .select('*')
+    .order('id', { ascending: false })
+    .limit(1)
+    .single()
+
+  if (error) {
+    throw new Error(`${error}`)
+  }
+
+  return data
+}
+
 export async function deleteRooms(id: number) {
   const { data, error } = await supabase.from('rooms').delete().eq('id', id)
 

@@ -23,7 +23,7 @@ const calculateThresholdIncrement = (
   )
 }
 
-const incrementNumber = ({ initial = 0, increment = 1, threshold = 4 }) => {
+const incrementNumber = ({ initial = 1, increment = 1, threshold = 4 }) => {
   const inputString = initial.toString()
   let number = initial + increment
   const firstDigit = Math.floor((initial + increment - 1) / threshold)

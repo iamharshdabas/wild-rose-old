@@ -49,6 +49,7 @@ export default function RoomList() {
     mutationFn: (id: number) => deleteRooms(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['rooms'] })
+      queryClient.invalidateQueries({ queryKey: ['last_room'] })
       toast.success('Room successfully deleted')
     },
     onError: (error) => {
@@ -123,8 +124,8 @@ export default function RoomList() {
             onValueChange={onSearchChange}
           />
           <div className="space-x-4">
-            <RoomPopulate />
-            <RoomCreate setPage={setPage} />
+            {items.length === 0 && <RoomPopulate />}
+            <RoomCreate />
           </div>
         </div>
         <div className="flex items-center justify-between">
