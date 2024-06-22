@@ -24,11 +24,12 @@ import { cn } from '@nextui-org/theme'
 import { Tooltip } from '@nextui-org/tooltip'
 import { useQueryClient } from '@tanstack/react-query'
 import { ChangeEvent, useCallback, useMemo, useState } from 'react'
-import { Edit, Search, Trash } from 'lucide-react'
+import { Search, Trash } from 'lucide-react'
 
 import RoomCreate from './create'
 import RoomPopulate from './populate'
 import RoomShow from './show'
+import RoomEdit from './edit'
 
 import { RoomColumnProps, RoomProps } from '@/types/room'
 import { subtitle, title } from '@/config/primitives'
@@ -226,9 +227,7 @@ const RoomList = () => {
                   <RoomShow id={rooms.id} />
                 </Tooltip>
                 <Tooltip content="Edit room">
-                  <span className="cursor-pointer text-lg text-default-400 active:opacity-50">
-                    <Edit />
-                  </span>
+                  <RoomEdit id={rooms.id} />
                 </Tooltip>
                 <Tooltip color="danger" content="Delete room">
                   <Button
