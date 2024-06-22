@@ -21,7 +21,6 @@ import {
   TableRow,
 } from '@nextui-org/table'
 import { cn } from '@nextui-org/theme'
-import { Tooltip } from '@nextui-org/tooltip'
 import { useQueryClient } from '@tanstack/react-query'
 import { ChangeEvent, useCallback, useMemo, useState } from 'react'
 import { Search, Trash } from 'lucide-react'
@@ -223,23 +222,17 @@ const RoomList = () => {
           return (
             <>
               <div className="relative flex items-center justify-center gap-2">
-                <Tooltip content="Details">
-                  <RoomShow id={rooms.id} />
-                </Tooltip>
-                <Tooltip content="Edit room">
-                  <RoomEdit id={rooms.id} />
-                </Tooltip>
-                <Tooltip color="danger" content="Delete room">
-                  <Button
-                    isIconOnly
-                    color="danger"
-                    disabled={isPending}
-                    variant="light"
-                    onPress={() => mutate(rooms.id)}
-                  >
-                    <Trash />
-                  </Button>
-                </Tooltip>
+                <RoomShow id={rooms.id} />
+                <RoomEdit id={rooms.id} />
+                <Button
+                  isIconOnly
+                  color="danger"
+                  disabled={isPending}
+                  variant="light"
+                  onPress={() => mutate(rooms.id)}
+                >
+                  <Trash />
+                </Button>
               </div>
             </>
           )

@@ -1,16 +1,18 @@
 import { Button } from '@nextui-org/button'
 import { Image } from '@nextui-org/image'
+import { Code } from '@nextui-org/code'
 import { Input } from '@nextui-org/input'
 import {
   Modal,
   ModalBody,
   ModalContent,
+  ModalFooter,
   ModalHeader,
   useDisclosure,
 } from '@nextui-org/modal'
 import { Slider } from '@nextui-org/slider'
 import { useQueryClient } from '@tanstack/react-query'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
 import incrementNumber from '@/utils/incrementNumber'
@@ -23,9 +25,7 @@ import { siteConfig } from '@/config/site'
 
 const RoomCreate = () => {
   const queryClient = useQueryClient()
-
   const { data: lastRoom } = useGetLastRoomQuery()
-
   const { mutate, isPending } = useCreateRoomMutation({
     onSuccess() {
       queryClient.invalidateQueries({ queryKey: [siteConfig.queryKey.rooms] })
@@ -37,19 +37,13 @@ const RoomCreate = () => {
   })
 
   const defaultValues = {
-    name: incrementNumber({ initial: lastRoom?.name || 0 }),
+    name: incrementNumber({ initial: lastRoom?.name }),
     price: getRandomPrice(1000, 10000, 250),
     bedroom: getRandomImage('bedroom'),
     bathroom: getRandomImage('bathroom'),
   }
 
-  const { isOpen, onOpen, onOpenChange } = useDisclosure()
-  const [bathroomImageSrc, setBathroomImageSrc] = useState(
-    getRandomImage('bathroom')
-  )
-  const [bedroomImageSrc, setBedroomImageSrc] = useState(
-    getRandomImage('bedroom')
-  )
+  const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure()
   const {
     control,
     handleSubmit,
@@ -66,6 +60,20 @@ const RoomCreate = () => {
     }
   }, [lastRoom, setValue])
 
+  const onSubmit = (data: RoomCreateProps) => {
+    const room: RoomCreateProps[] = [
+      {
+        name: data.name,
+        price: data.price,
+        bedroom: data.bedroom,
+        bathroom: data.bathroom,
+      },
+    ]
+
+    mutate(room)
+    onClose()
+  }
+
   return (
     <>
       <Button
@@ -76,113 +84,129 @@ const RoomCreate = () => {
       >
         Create
       </Button>
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+      <Modal
+        isOpen={isOpen}
+        scrollBehavior="outside"
+        size="3xl"
+        onOpenChange={onOpenChange}
+      >
         <ModalContent>
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col">Create Room</ModalHeader>
-              <ModalBody>
-                <form
-                  className="space-y-4"
-                  onSubmit={handleSubmit((data) => {
-                    const room: RoomCreateProps[] = [
-                      {
-                        name: data.name,
-                        price: data.price,
-                        bedroom: data.bedroom,
-                        bathroom: data.bathroom,
-                      },
-                    ]
 
-                    mutate(room)
-                    onClose()
-                  })}
-                >
-                  <Controller
-                    control={control}
-                    name="name"
-                    render={({ field }) => (
-                      <Input
-                        {...field}
-                        isRequired
-                        description={'Use 1 if there is no data in the table.'}
-                        errorMessage={errors.name?.message}
-                        label="Name"
-                        type="number"
-                        value={field.value.toString()}
-                      />
-                    )}
-                    rules={{ required: 'This field is required' }}
-                  />
-                  <Controller
-                    control={control}
-                    name="price"
-                    render={({ field }) => (
-                      <div>
-                        <Slider
+              <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+                <ModalBody>
+                  <div className="space-y-4">
+                    {/* TODO: get this from api */}
+                    <Code size="lg">Threshold: 16</Code>
+                    <Controller
+                      control={control}
+                      name="name"
+                      render={({ field }) => (
+                        <Input
                           {...field}
-                          showTooltip
-                          formatOptions={{ style: 'currency', currency: 'INR' }}
-                          label="Price"
-                          maxValue={10000}
-                          minValue={1000}
-                          step={250} // TODO: this value must be same as priceStep. in future get this from api
-                          tooltipValueFormatOptions={{
-                            style: 'currency',
-                            currency: 'INR',
-                          }}
-                          onChange={(value) => field.onChange(value)}
+                          isRequired
+                          description={'Check threshold overflow condition'}
+                          errorMessage={errors.name?.message}
+                          label="Name"
+                          type="number"
+                          value={field.value.toString()}
+                        />
+                      )}
+                      rules={{ required: 'This field is required' }}
+                    />
+                    <Controller
+                      control={control}
+                      name="price"
+                      render={({ field }) => (
+                        <div>
+                          <Slider
+                            {...field}
+                            showTooltip
+                            formatOptions={{
+                              style: 'currency',
+                              currency: 'INR',
+                            }}
+                            label="Price"
+                            maxValue={10000}
+                            minValue={1000}
+                            step={250} // TODO: this value must be same as priceStep. in future get this from api
+                            tooltipValueFormatOptions={{
+                              style: 'currency',
+                              currency: 'INR',
+                            }}
+                            onChange={(value) => field.onChange(value)}
+                          />
+                        </div>
+                      )}
+                    />
+                    <div className="flex flex-col gap-4 sm:flex-row">
+                      <div className="flex flex-col items-center justify-center gap-2">
+                        <Controller
+                          control={control}
+                          name="bedroom"
+                          render={({ field }) => (
+                            <>
+                              <Image
+                                isBlurred
+                                alt="Bedroom image"
+                                height={1024}
+                                src={field.value}
+                                width={1536}
+                              />
+                              <Button
+                                onPress={() =>
+                                  field.onChange(getRandomImage('bedroom'))
+                                }
+                              >
+                                Get Random image
+                              </Button>
+                            </>
+                          )}
                         />
                       </div>
-                    )}
-                  />
-                  <div className="space-y-2">
-                    <Image
-                      isBlurred
-                      alt="Bathroom image"
-                      height={1024}
-                      src={bathroomImageSrc}
-                      width={1536}
-                    />
-                    <Button
-                      onPress={() =>
-                        setBathroomImageSrc(getRandomImage('bathroom'))
-                      }
-                    >
-                      Get Random Image
-                    </Button>
+                      <div className="flex flex-col items-center justify-center gap-2">
+                        <Controller
+                          control={control}
+                          name="bathroom"
+                          render={({ field }) => (
+                            <>
+                              <Image
+                                isBlurred
+                                alt="Bathroom image"
+                                height={1024}
+                                src={field.value}
+                                width={1536}
+                              />
+                              <Button
+                                onPress={() =>
+                                  field.onChange(getRandomImage('bathroom'))
+                                }
+                              >
+                                Get Random image
+                              </Button>
+                            </>
+                          )}
+                        />
+                      </div>
+                    </div>
                   </div>
-                  <div className="space-y-2">
-                    <Image
-                      isBlurred
-                      alt="Room image"
-                      height={1024}
-                      src={bedroomImageSrc}
-                      width={1536}
-                    />
-                    <Button
-                      onPress={() =>
-                        setBedroomImageSrc(getRandomImage('bedroom'))
-                      }
-                    >
-                      Get Random Image
-                    </Button>
-                  </div>
-                  <div className="flex justify-end gap-2 py-2">
-                    <Button
-                      color="danger"
-                      type="reset"
-                      variant="light"
-                      onPress={onClose}
-                    >
-                      Close
-                    </Button>
-                    <Button color="primary" isLoading={isPending} type="submit">
-                      Submit
-                    </Button>
-                  </div>
-                </form>
-              </ModalBody>
+                </ModalBody>
+                <ModalFooter>
+                  <Button
+                    color="danger"
+                    type="reset"
+                    variant="light"
+                    onPress={onClose}
+                  >
+                    Close
+                  </Button>
+                  <Button color="primary" isLoading={isPending} type="submit">
+                    Submit
+                  </Button>
+                </ModalFooter>
+              </form>
             </>
           )}
         </ModalContent>

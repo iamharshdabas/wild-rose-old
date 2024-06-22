@@ -5,10 +5,10 @@ import {
   ModalHeader,
   ModalBody,
   useDisclosure,
+  ModalFooter,
 } from '@nextui-org/modal'
 import { Edit } from 'lucide-react'
 import { Spinner } from '@nextui-org/spinner'
-import { forwardRef } from '@nextui-org/system'
 import { Image } from '@nextui-org/image'
 import { Input } from '@nextui-org/input'
 import { Slider } from '@nextui-org/slider'
@@ -22,16 +22,12 @@ import getRandomImage from '@/utils/getRandomImage'
 import useUpdateRoomMutation from '@/hooks/rooms/useUpdateRoomMutation'
 import { siteConfig } from '@/config/site'
 
-const RoomShow = forwardRef(({ id }: { id: number }, ref) => {
+const RoomEdit = ({ id }: { id: number }) => {
   const queryClient = useQueryClient()
-
   const { data: room, isLoading } = useGetRoomQuery(id)
-
   const { mutate, isPending } = useUpdateRoomMutation({
     onSuccess() {
-      queryClient.invalidateQueries({
-        queryKey: [siteConfig.queryKey.rooms],
-      })
+      queryClient.invalidateQueries({ queryKey: [siteConfig.queryKey.rooms] })
       queryClient.invalidateQueries({
         queryKey: [siteConfig.queryKey.rooms, id],
       })
@@ -47,6 +43,15 @@ const RoomShow = forwardRef(({ id }: { id: number }, ref) => {
     setValue,
   } = useForm<RoomCreateProps>()
 
+  useEffect(() => {
+    if (room) {
+      setValue('name', room.name)
+      setValue('price', room.price)
+      setValue('bedroom', room.bedroom)
+      setValue('bathroom', room.bathroom)
+    }
+  }, [room, setValue])
+
   const onSubmit = (data: RoomCreateProps) => {
     const newRoom: RoomCreateProps = {
       name: data.name,
@@ -59,24 +64,15 @@ const RoomShow = forwardRef(({ id }: { id: number }, ref) => {
     onClose()
   }
 
-  useEffect(() => {
-    if (room) {
-      setValue('name', room.name)
-      setValue('price', room.price)
-      setValue('bedroom', room.bedroom)
-      setValue('bathroom', room.bathroom)
-    }
-  }, [room, setValue])
-
   return (
     <>
-      <Button ref={ref} isIconOnly variant="light" onPress={onOpen}>
+      <Button isIconOnly variant="light" onPress={onOpen}>
         <Edit />
       </Button>
       <Modal
         isOpen={isOpen}
-        scrollBehavior="normal"
-        size="2xl"
+        scrollBehavior="outside"
+        size="3xl"
         onOpenChange={onOpenChange}
       >
         <ModalContent>
@@ -183,26 +179,22 @@ const RoomShow = forwardRef(({ id }: { id: number }, ref) => {
                           />
                         </div>
                       </div>
-                      <div className="flex justify-end gap-2 py-2">
-                        <Button
-                          color="danger"
-                          type="reset"
-                          variant="light"
-                          onPress={onClose}
-                        >
-                          Close
-                        </Button>
-                        <Button
-                          color="primary"
-                          isLoading={isPending}
-                          type="submit"
-                        >
-                          Submit
-                        </Button>
-                      </div>
                     </div>
                   )}
                 </ModalBody>
+                <ModalFooter>
+                  <Button
+                    color="danger"
+                    type="reset"
+                    variant="light"
+                    onPress={onClose}
+                  >
+                    Close
+                  </Button>
+                  <Button color="primary" isLoading={isPending} type="submit">
+                    Submit
+                  </Button>
+                </ModalFooter>
               </form>
             </>
           )}
@@ -210,6 +202,6 @@ const RoomShow = forwardRef(({ id }: { id: number }, ref) => {
       </Modal>
     </>
   )
-})
+}
 
-export default RoomShow
+export default RoomEdit

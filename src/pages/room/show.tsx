@@ -10,8 +10,9 @@ import {
 } from '@nextui-org/modal'
 import { Eye } from 'lucide-react'
 import { Spinner } from '@nextui-org/spinner'
-import { forwardRef } from '@nextui-org/system'
 import { Image } from '@nextui-org/image'
+
+import RoomEdit from './edit'
 
 import useGetRoomQuery from '@/hooks/rooms/useGetRoomQuery'
 import {
@@ -24,17 +25,18 @@ import {
 import formatDate from '@/utils/formatDate'
 import { title } from '@/config/primitives'
 
-const RoomShow = forwardRef(({ id }: { id: number }, ref) => {
+const RoomShow = ({ id }: { id: number }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
   const { data: room, isLoading } = useGetRoomQuery(id)
 
   return (
     <>
-      <Button ref={ref} isIconOnly variant="light" onPress={onOpen}>
+      <Button isIconOnly variant="light" onPress={onOpen}>
         <Eye />
       </Button>
-      <Modal isOpen={isOpen} size="2xl" onOpenChange={onOpenChange}>
+      {/* scrollBehavior="outside" TODO: uncomment this when there are bookings are there */}
+      <Modal isOpen={isOpen} size="3xl" onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (
             <>
@@ -92,9 +94,7 @@ const RoomShow = forwardRef(({ id }: { id: number }, ref) => {
                 <Button color="danger" variant="light" onPress={onClose}>
                   Close
                 </Button>
-                <Button color="primary" onPress={onClose}>
-                  Action
-                </Button>
+                <RoomEdit id={id} />
               </ModalFooter>
             </>
           )}
@@ -102,6 +102,6 @@ const RoomShow = forwardRef(({ id }: { id: number }, ref) => {
       </Modal>
     </>
   )
-})
+}
 
 export default RoomShow

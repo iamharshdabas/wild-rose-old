@@ -1,3 +1,5 @@
+// FIX: you know this is broken. how many times are you gonna fix it ?
+
 const padNumberWithLeadingZeros = (number: number, length: number) => {
   return number.toString().padStart(length, '0')
 }
@@ -23,7 +25,7 @@ const calculateThresholdIncrement = (
   )
 }
 
-const incrementNumber = ({ initial = 1, increment = 1, threshold = 4 }) => {
+const incrementNumber = ({ initial = 0, increment = 1, threshold = 4 }) => {
   const inputString = initial.toString()
   let number = initial + increment
   const firstDigit = Math.floor((initial + increment - 1) / threshold)

@@ -54,7 +54,7 @@ const RoomPopulate = () => {
 
   const onSubmit = (data: PopulateRoomProps) => {
     const rooms: RoomCreateProps[] = []
-    const { sliderRange, priceStep, totalRooms } = data
+    const { sliderRange, priceStep, totalRooms, threshold } = data
 
     let sliderMin: number, sliderMax: number
 
@@ -66,7 +66,7 @@ const RoomPopulate = () => {
 
     for (let i = 0; i < totalRooms; i++) {
       const room: RoomCreateProps = {
-        name: incrementNumber({ increment: i }),
+        name: incrementNumber({ initial: 1, increment: i, threshold }),
         price: getRandomPrice(sliderMin, sliderMax, priceStep),
         bathroom: getRandomImage('bathroom'),
         bedroom: getRandomImage('bedroom'),
