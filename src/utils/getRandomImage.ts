@@ -1,46 +1,44 @@
-export const images = [
-  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms/0IVv_cOZeY4Uy09sPRtMu.png',
-  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms/6X7tZ0W-thI6NhziV5-6n.png',
-  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms/6X7tZ0W-thI6NhziV5-6n.png',
-  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms/6X7tZ0W-thI6NhziV5-6n.png',
-  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms/6X7tZ0W-thI6NhziV5-6n.png',
-  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms/6X7tZ0W-thI6NhziV5-6n.png',
-  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms/DsgJ5MQnO7-vGz9PUVqN5.png',
-  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms/DsgJ5MQnO7-vGz9PUVqN5.png',
-  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms/DsgJ5MQnO7-vGz9PUVqN5.png',
-  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms/H5vgt3L9rK4As07n-7LUX.png',
-  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms/H5vgt3L9rK4As07n-7LUX.png',
-  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms/L0tmida2pQp_eaaSKikkp.png',
-  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms/OJIcSrCNaiB470n4HwRt7.png',
-  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms/OV8Zta0wIejA35ZxSNDP3.png',
-  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms/OV8Zta0wIejA35ZxSNDP3.png',
-  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms/TQ8sNoTwLPzO4_5t2Y1xg.png',
-  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms/V9TONWZ4TGHsdBHu0b1AX.png',
-  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms/W4mjVSWRZ5u_Q8oed3MC0.png',
-  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms/XKIR83779TBx5fb-yD35D.png',
-  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms/XKIR83779TBx5fb-yD35D.png',
-  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms/YqX-VBvZIRJDuFFN4co93.png',
-  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms/YqX-VBvZIRJDuFFN4co93.png',
-  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms/YqX-VBvZIRJDuFFN4co93.png',
-  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms/aszi5Fn0Y5AZpScFCaYip.png',
-  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms/cBOHSXqcxA3wgdo31PohC.png',
-  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms/cBOHSXqcxA3wgdo31PohC.png',
-  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms/iQg-EgOeV8xDI3uxdx2tD.png',
-  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms/kw9b1z5--VQrnzTvohAAI.png',
-  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms/mp4G5mEu1A9ApGyk7J8UH.png',
-  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms/mp4G5mEu1A9ApGyk7J8UH.png',
-  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms/mp4G5mEu1A9ApGyk7J8UH.png',
-  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms/mp4G5mEu1A9ApGyk7J8UH.png',
-  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms/mp4G5mEu1A9ApGyk7J8UH.png',
-  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms/rpnVB5uzzr-uagvwwNxGL.png',
-  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms/rpnVB5uzzr-uagvwwNxGL.png',
-  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms/rpnVB5uzzr-uagvwwNxGL.png',
-  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms/rpnVB5uzzr-uagvwwNxGL.png',
-  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms/wpjNXq8wStewL1n4yaJeB.png',
-  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms/wpjNXq8wStewL1n4yaJeB.png',
-  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms/zdePKdECjJh2NwPt29_Et.png',
+import { BucketProps } from '@/types/storage'
+
+// TODO: get these urls via api
+const bedroom = [
+  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms-bedroom/0rileMqXqBp4zRxAJtBH2.jpg',
+  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms-bedroom/3v_ggRM6pFYVWaqiS5YnX.jpg',
+  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms-bedroom/610cPh9stuAEpW77RH3Xf.jpg',
+  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms-bedroom/OZzZkCDbfEJ8VofetzZsB.jpg',
+  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms-bedroom/Sd7Cze5X-fWTK9xWOlBbE.jpg',
+  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms-bedroom/U06bB_DNU1NBk9xWQ38UC.jpg',
+  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms-bedroom/ZIQchQEac_wjQrwO6pbze.jpg',
+  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms-bedroom/ZgAzgVsuRZSNJTLEIg_sz.jpg',
+  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms-bedroom/dP6ECQhAbJhKPF-V54yEt.jpg',
+  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms-bedroom/hy2FDRUhLVvW1I_Qrrz9z.jpg',
+  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms-bedroom/oRUTTUBiN2PklJsWmu4do.jpg',
+  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms-bedroom/uXNN7DgHiH873Tn7BAuwL.jpg',
 ]
 
-const getRandomImage = () => images[Math.floor(Math.random() * images.length)]
+const bathroom = [
+  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms-bathroom/1fif3LgMNCgwTrxHNel-Y.jpg',
+  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms-bathroom/PNHzgdMEaBmognKlS2-pV.jpg',
+  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms-bathroom/U7yjplcKlDusuZ-j0RlBc.jpg',
+  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms-bathroom/Ua720LkPE_q9l1-ZMNVxC.jpg',
+  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms-bathroom/Uz3XeZmY-rv3SDGiUZRL4.jpg',
+  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms-bathroom/Y8VBHLP3eTd8Vx7cSekRh.jpg',
+  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms-bathroom/ZFp52MF_f1HsBEla-0N8K.jpg',
+  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms-bathroom/eILpHe4AMEIup7gr4DeOH.jpg',
+  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms-bathroom/gSHJHMGNp86AQC9JwcWk1.jpg',
+  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms-bathroom/k-h1TejH1Dif0eiu05W9X.jpg',
+  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms-bathroom/oZ7WWuHj1-5PremxKHAPo.jpg',
+  'https://yxoqmnwlixhxdxtgjthx.supabase.co/storage/v1/object/public/rooms-bathroom/oZ7WWuHj1-5PremxKHAPo.jpg',
+]
+
+const getRandomImage = (of: BucketProps) => {
+  switch (of) {
+    case 'bedroom':
+      return bedroom[Math.floor(Math.random() * bedroom.length)]
+
+    case 'bathroom':
+      return bathroom[Math.floor(Math.random() * bathroom.length)]
+  }
+}
 
 export default getRandomImage

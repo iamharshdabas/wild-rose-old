@@ -68,7 +68,8 @@ const RoomPopulate = () => {
       const room: RoomCreateProps = {
         name: incrementNumber({ increment: i }),
         price: getRandomPrice(sliderMin, sliderMax, priceStep),
-        image: getRandomImage(),
+        bathroom: getRandomImage('bathroom'),
+        bedroom: getRandomImage('bedroom'),
       }
 
       rooms.push(room)

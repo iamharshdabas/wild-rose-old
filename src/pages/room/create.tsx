@@ -39,11 +39,17 @@ const RoomCreate = () => {
   const defaultValues = {
     name: incrementNumber({ initial: lastRoom?.name || 0 }),
     price: getRandomPrice(1000, 10000, 250),
-    image: getRandomImage(),
+    bedroom: getRandomImage('bedroom'),
+    bathroom: getRandomImage('bathroom'),
   }
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
-  const [imageSrc, setImageSrc] = useState(getRandomImage())
+  const [bathroomImageSrc, setBathroomImageSrc] = useState(
+    getRandomImage('bathroom')
+  )
+  const [bedroomImageSrc, setBedroomImageSrc] = useState(
+    getRandomImage('bedroom')
+  )
   const {
     control,
     handleSubmit,
@@ -59,10 +65,6 @@ const RoomCreate = () => {
       setValue('name', incrementNumber({ initial: lastRoom.name }))
     }
   }, [lastRoom, setValue])
-
-  const handleImageChange = () => {
-    setImageSrc(getRandomImage())
-  }
 
   return (
     <>
@@ -87,7 +89,8 @@ const RoomCreate = () => {
                       {
                         name: data.name,
                         price: data.price,
-                        image: imageSrc,
+                        bedroom: data.bedroom,
+                        bathroom: data.bathroom,
                       },
                     ]
 
@@ -136,12 +139,32 @@ const RoomCreate = () => {
                   <div className="space-y-2">
                     <Image
                       isBlurred
-                      alt="Room image"
+                      alt="Bathroom image"
                       height={1024}
-                      src={imageSrc}
+                      src={bathroomImageSrc}
                       width={1536}
                     />
-                    <Button onPress={handleImageChange}>
+                    <Button
+                      onPress={() =>
+                        setBathroomImageSrc(getRandomImage('bathroom'))
+                      }
+                    >
+                      Get Random Image
+                    </Button>
+                  </div>
+                  <div className="space-y-2">
+                    <Image
+                      isBlurred
+                      alt="Room image"
+                      height={1024}
+                      src={bedroomImageSrc}
+                      width={1536}
+                    />
+                    <Button
+                      onPress={() =>
+                        setBedroomImageSrc(getRandomImage('bedroom'))
+                      }
+                    >
                       Get Random Image
                     </Button>
                   </div>

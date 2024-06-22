@@ -176,7 +176,7 @@ const RoomList = () => {
     label: string
   }[] = useMemo(
     () => [
-      { key: 'image', label: 'Image' },
+      { key: 'bedroom', label: 'Image' },
       { key: 'id', label: 'ID' },
       { key: 'created_at', label: 'Created At' },
       { key: 'name', label: 'Name' },
@@ -191,7 +191,7 @@ const RoomList = () => {
       const cellValue = rooms[columnKey]
 
       switch (columnKey) {
-        case 'image':
+        case 'bedroom':
           return (
             <div className="flex justify-center">
               <Avatar
@@ -328,7 +328,7 @@ const RoomList = () => {
           <ModalContent>
             {(onClose) => (
               <>
-                <ModalHeader className="flex flex-col">Room</ModalHeader>
+                <ModalHeader className="flex flex-col">Bedroom</ModalHeader>
                 <ModalBody>
                   <Image
                     isBlurred
