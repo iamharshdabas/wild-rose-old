@@ -1,10 +1,4 @@
 import { Avatar } from '@nextui-org/avatar'
-import {
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem,
-} from '@nextui-org/dropdown'
 import { Button } from '@nextui-org/button'
 import { Image } from '@nextui-org/image'
 import { Input } from '@nextui-org/input'
@@ -30,16 +24,18 @@ import { cn } from '@nextui-org/theme'
 import { Tooltip } from '@nextui-org/tooltip'
 import { useQueryClient } from '@tanstack/react-query'
 import { ChangeEvent, useCallback, useMemo, useState } from 'react'
-import { Edit, EllipsisVertical, Eye, Search, Trash } from 'lucide-react'
+import { Edit, Search, Trash } from 'lucide-react'
 
 import RoomCreate from './create'
 import RoomPopulate from './populate'
+import RoomShow from './show'
 
 import { RoomColumnProps, RoomProps } from '@/types/room'
 import { subtitle, title } from '@/config/primitives'
 import useGetRoomsQuery from '@/hooks/rooms/useGetRoomsQuery'
 import useDeleteRoomMutation from '@/hooks/rooms/useDeleteRoomMutation'
 import { siteConfig } from '@/config/site'
+import formatDate from '@/utils/formatDate'
 
 const RoomList = () => {
   const queryClient = useQueryClient()
@@ -210,16 +206,9 @@ const RoomList = () => {
         case 'id':
           return <h2 className={subtitle()}>{cellValue}</h2>
         case 'created_at':
-          const formattedDate = new Date(cellValue).toLocaleDateString(
-            'en-US',
-            {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-            }
+          return (
+            <h2 className={subtitle()}>{formatDate(cellValue.toString())}</h2>
           )
-
-          return <h2 className={subtitle()}>{formattedDate}</h2>
         case 'name':
           return <h2 className={subtitle()}>{cellValue}</h2>
         case 'price':
@@ -232,11 +221,9 @@ const RoomList = () => {
         case 'actions': // TODO: onClick CRUD operations
           return (
             <>
-              <div className="relative hidden items-center justify-center gap-2 sm:flex">
+              <div className="relative flex items-center justify-center gap-2">
                 <Tooltip content="Details">
-                  <span className="cursor-pointer text-lg text-default-400 active:opacity-50">
-                    <Eye />
-                  </span>
+                  <RoomShow id={rooms.id} />
                 </Tooltip>
                 <Tooltip content="Edit room">
                   <span className="cursor-pointer text-lg text-default-400 active:opacity-50">
@@ -254,27 +241,6 @@ const RoomList = () => {
                     <Trash />
                   </Button>
                 </Tooltip>
-              </div>
-              <div className="relative flex items-center justify-center gap-2 sm:hidden">
-                <Dropdown>
-                  <DropdownTrigger>
-                    <Button isIconOnly size="sm" variant="light">
-                      <EllipsisVertical />
-                    </Button>
-                  </DropdownTrigger>
-                  <DropdownMenu>
-                    <DropdownItem startContent={<Eye />}>View</DropdownItem>
-                    <DropdownItem startContent={<Edit />}>Edit</DropdownItem>
-                    <DropdownItem
-                      className="text-danger"
-                      color="danger"
-                      startContent={<Trash />}
-                      onPress={() => mutate(rooms.id)}
-                    >
-                      Delete
-                    </DropdownItem>
-                  </DropdownMenu>
-                </Dropdown>
               </div>
             </>
           )
