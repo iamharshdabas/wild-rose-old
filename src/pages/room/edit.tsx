@@ -21,10 +21,12 @@ import { RoomCreateProps } from '@/types/room'
 import getRandomImage from '@/utils/getRandomImage'
 import useUpdateRoomMutation from '@/hooks/rooms/useUpdateRoomMutation'
 import { siteConfig } from '@/config/site'
+import useGetSettingsQuery from '@/hooks/settings/useGetSettingsQuery'
 
 const RoomEdit = ({ id }: { id: number }) => {
   const queryClient = useQueryClient()
-  const { data: room, isLoading } = useGetRoomQuery(id)
+  const { data: room, isLoading: isRoomLoading } = useGetRoomQuery(id)
+  const { data: settings } = useGetSettingsQuery()
   const { mutate, isPending } = useUpdateRoomMutation({
     onSuccess() {
       queryClient.invalidateQueries({ queryKey: [siteConfig.queryKey.rooms] })
@@ -81,7 +83,7 @@ const RoomEdit = ({ id }: { id: number }) => {
               <ModalHeader className="flex flex-col">Room details</ModalHeader>
               <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
                 <ModalBody>
-                  {isLoading ? (
+                  {isRoomLoading ? (
                     <Spinner />
                   ) : (
                     <div className="flex flex-col gap-2">
@@ -117,9 +119,9 @@ const RoomEdit = ({ id }: { id: number }) => {
                                 currency: 'INR',
                               }}
                               label="Price"
-                              maxValue={10000}
-                              minValue={1000}
-                              step={250} // TODO: this value must be same as priceStep. in future get this from api
+                              maxValue={settings?.priceMax}
+                              minValue={settings?.priceMin}
+                              step={settings?.priceStep}
                               tooltipValueFormatOptions={{
                                 style: 'currency',
                                 currency: 'INR',

@@ -218,7 +218,7 @@ const RoomList = () => {
               {cellValue}
             </h2>
           )
-        case 'actions': // TODO: onClick CRUD operations
+        case 'actions':
           return (
             <>
               <div className="relative flex items-center justify-center gap-2">
@@ -300,12 +300,6 @@ const RoomList = () => {
                   <Button color="danger" variant="light" onPress={onClose}>
                     Close
                   </Button>
-                  {/*
-                   * TODO: implement image actions
-                   */}
-                  {/* <Button color="primary" onPress={onClose}> */}
-                  {/*   Action */}
-                  {/* </Button> */}
                 </ModalFooter>
               </>
             )}

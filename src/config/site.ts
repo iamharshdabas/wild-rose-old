@@ -1,7 +1,5 @@
 export type SiteConfig = typeof siteConfig
 
-// TODO: add all query keys here
-
 export const siteConfig = {
   navItems: [
     {
@@ -58,5 +56,6 @@ export const siteConfig = {
   queryKey: {
     rooms: 'rooms',
     lastRoom: 'last_room',
+    settings: 'settings',
   },
 }

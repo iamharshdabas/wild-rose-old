@@ -14,6 +14,7 @@ import { Slider } from '@nextui-org/slider'
 import { useQueryClient } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
+import { Spinner } from '@nextui-org/spinner'
 
 import incrementNumber from '@/utils/incrementNumber'
 import getRandomPrice from '@/utils/getRandomPrice'
@@ -22,10 +23,12 @@ import { RoomCreateProps } from '@/types/room'
 import useGetLastRoomQuery from '@/hooks/rooms/useGetLastRoomQuery'
 import useCreateRoomMutation from '@/hooks/rooms/useCreateRoomMutation'
 import { siteConfig } from '@/config/site'
+import useGetSettingsQuery from '@/hooks/settings/useGetSettingsQuery'
 
 const RoomCreate = () => {
   const queryClient = useQueryClient()
   const { data: lastRoom } = useGetLastRoomQuery()
+  const { data: settings, isLoading: isSettingsLoading } = useGetSettingsQuery()
   const { mutate, isPending } = useCreateRoomMutation({
     onSuccess() {
       queryClient.invalidateQueries({ queryKey: [siteConfig.queryKey.rooms] })
@@ -38,7 +41,7 @@ const RoomCreate = () => {
 
   const defaultValues = {
     name: incrementNumber({ initial: lastRoom?.name }),
-    price: getRandomPrice(1000, 10000, 250),
+    price: 0,
     bedroom: getRandomImage('bedroom'),
     bathroom: getRandomImage('bathroom'),
   }
@@ -55,8 +58,12 @@ const RoomCreate = () => {
   })
 
   useEffect(() => {
-    if (lastRoom) {
+    if (lastRoom && settings) {
       setValue('name', incrementNumber({ initial: lastRoom.name }))
+      setValue(
+        'price',
+        getRandomPrice(settings.priceMin, settings.priceMax, settings.priceStep)
+      )
     }
   }, [lastRoom, setValue])
 
@@ -94,119 +101,123 @@ const RoomCreate = () => {
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col">Create Room</ModalHeader>
-
-              <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
-                <ModalBody>
-                  <div className="space-y-4">
-                    {/* TODO: get this from api */}
-                    <Code size="lg">Threshold: 16</Code>
-                    <Controller
-                      control={control}
-                      name="name"
-                      render={({ field }) => (
-                        <Input
-                          {...field}
-                          isRequired
-                          description={'Check threshold overflow condition'}
-                          errorMessage={errors.name?.message}
-                          label="Name"
-                          type="number"
-                          value={field.value.toString()}
-                        />
-                      )}
-                      rules={{ required: 'This field is required' }}
-                    />
-                    <Controller
-                      control={control}
-                      name="price"
-                      render={({ field }) => (
-                        <div>
-                          <Slider
+              {isSettingsLoading ? (
+                <Spinner />
+              ) : (
+                <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+                  <ModalBody>
+                    <div className="space-y-4">
+                      <Code size="lg">
+                        Threshold: {settings?.roomThreshold}
+                      </Code>
+                      <Controller
+                        control={control}
+                        name="name"
+                        render={({ field }) => (
+                          <Input
                             {...field}
-                            showTooltip
-                            formatOptions={{
-                              style: 'currency',
-                              currency: 'INR',
-                            }}
-                            label="Price"
-                            maxValue={10000}
-                            minValue={1000}
-                            step={250} // TODO: this value must be same as priceStep. in future get this from api
-                            tooltipValueFormatOptions={{
-                              style: 'currency',
-                              currency: 'INR',
-                            }}
-                            onChange={(value) => field.onChange(value)}
+                            isRequired
+                            description={'Check threshold overflow condition'}
+                            errorMessage={errors.name?.message}
+                            label="Name"
+                            type="number"
+                            value={field.value.toString()}
+                          />
+                        )}
+                        rules={{ required: 'This field is required' }}
+                      />
+                      <Controller
+                        control={control}
+                        name="price"
+                        render={({ field }) => (
+                          <div>
+                            <Slider
+                              {...field}
+                              showTooltip
+                              formatOptions={{
+                                style: 'currency',
+                                currency: 'INR',
+                              }}
+                              label="Price"
+                              maxValue={settings?.priceMax}
+                              minValue={settings?.priceMin}
+                              step={settings?.priceStep}
+                              tooltipValueFormatOptions={{
+                                style: 'currency',
+                                currency: 'INR',
+                              }}
+                              onChange={(value) => field.onChange(value)}
+                            />
+                          </div>
+                        )}
+                      />
+                      <div className="flex flex-col gap-4 sm:flex-row">
+                        <div className="flex flex-col items-center justify-center gap-2">
+                          <Controller
+                            control={control}
+                            name="bedroom"
+                            render={({ field }) => (
+                              <>
+                                <Image
+                                  isBlurred
+                                  alt="Bedroom image"
+                                  height={1024}
+                                  src={field.value}
+                                  width={1536}
+                                />
+                                <Button
+                                  onPress={() =>
+                                    field.onChange(getRandomImage('bedroom'))
+                                  }
+                                >
+                                  Get Random image
+                                </Button>
+                              </>
+                            )}
                           />
                         </div>
-                      )}
-                    />
-                    <div className="flex flex-col gap-4 sm:flex-row">
-                      <div className="flex flex-col items-center justify-center gap-2">
-                        <Controller
-                          control={control}
-                          name="bedroom"
-                          render={({ field }) => (
-                            <>
-                              <Image
-                                isBlurred
-                                alt="Bedroom image"
-                                height={1024}
-                                src={field.value}
-                                width={1536}
-                              />
-                              <Button
-                                onPress={() =>
-                                  field.onChange(getRandomImage('bedroom'))
-                                }
-                              >
-                                Get Random image
-                              </Button>
-                            </>
-                          )}
-                        />
-                      </div>
-                      <div className="flex flex-col items-center justify-center gap-2">
-                        <Controller
-                          control={control}
-                          name="bathroom"
-                          render={({ field }) => (
-                            <>
-                              <Image
-                                isBlurred
-                                alt="Bathroom image"
-                                height={1024}
-                                src={field.value}
-                                width={1536}
-                              />
-                              <Button
-                                onPress={() =>
-                                  field.onChange(getRandomImage('bathroom'))
-                                }
-                              >
-                                Get Random image
-                              </Button>
-                            </>
-                          )}
-                        />
+                        <div className="flex flex-col items-center justify-center gap-2">
+                          <Controller
+                            control={control}
+                            name="bathroom"
+                            render={({ field }) => (
+                              <>
+                                <Image
+                                  isBlurred
+                                  alt="Bathroom image"
+                                  height={1024}
+                                  src={field.value}
+                                  width={1536}
+                                />
+                                <Button
+                                  onPress={() =>
+                                    field.onChange(getRandomImage('bathroom'))
+                                  }
+                                >
+                                  Get Random image
+                                </Button>
+                              </>
+                            )}
+                          />
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </ModalBody>
-                <ModalFooter>
-                  <Button
-                    color="danger"
-                    type="reset"
-                    variant="light"
-                    onPress={onClose}
-                  >
-                    Close
-                  </Button>
-                  <Button color="primary" isLoading={isPending} type="submit">
-                    Submit
-                  </Button>
-                </ModalFooter>
-              </form>
+                  </ModalBody>
+                  <ModalFooter>
+                    <Button
+                      color="danger"
+                      type="reset"
+                      variant="light"
+                      onPress={onClose}
+                    >
+                      Close
+                    </Button>
+                    <Button color="primary" isLoading={isPending} type="submit">
+                      Submit
+                    </Button>
+                  </ModalFooter>
+                </form>
+              )}
             </>
           )}
         </ModalContent>
