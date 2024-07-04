@@ -9,7 +9,7 @@ import {
   TableRow,
 } from '@nextui-org/table'
 import { cn } from '@nextui-org/theme'
-import { ChangeEvent, useCallback, useMemo, useState } from 'react'
+import { ChangeEvent, ReactNode, useCallback, useMemo, useState } from 'react'
 import { Search } from 'lucide-react'
 
 import { subtitle } from '@/config/primitives'
@@ -17,8 +17,10 @@ import { subtitle } from '@/config/primitives'
 interface DataTableProps<T> {
   data: T[]
   columns: { key: keyof T; label: string }[]
-  renderCell: (item: T, columnKey: keyof T) => React.ReactNode
+  renderCell: (item: T, columnKey: keyof T) => ReactNode
   toFilter: keyof T
+  populateComponent: ReactNode
+  createComponent: ReactNode
 }
 
 const DataTable = <T extends { id: number }>({
@@ -26,6 +28,8 @@ const DataTable = <T extends { id: number }>({
   columns,
   renderCell,
   toFilter,
+  populateComponent,
+  createComponent,
 }: DataTableProps<T>) => {
   const [filterValue, setFilterValue] = useState('')
   const [rowsPerPage, setRowsPerPage] = useState(10)
@@ -101,9 +105,8 @@ const DataTable = <T extends { id: number }>({
             onValueChange={onSearchChange}
           />
           <div className="flex justify-end gap-4">
-            {/* TODO: */}
-            {/* <RoomPopulate /> */}
-            {/* <RoomCreate /> */}
+            {populateComponent}
+            {createComponent}
           </div>
         </div>
         <div className="flex items-center justify-between">

@@ -17,6 +17,8 @@ import { cn } from '@nextui-org/theme'
 
 import RoomShow from './show'
 import RoomEdit from './edit'
+import RoomPopulate from './populate'
+import RoomCreate from './create'
 
 import { RoomColumnProps, RoomProps } from '@/types/room'
 import { subtitle, title } from '@/config/primitives'
@@ -130,7 +132,9 @@ const RoomList = () => {
         ) : (
           <DataTable
             columns={columns}
+            createComponent={<RoomCreate />}
             data={data}
+            populateComponent={<RoomPopulate />}
             renderCell={renderCell}
             toFilter={'name'}
           />
