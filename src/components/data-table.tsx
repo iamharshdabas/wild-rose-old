@@ -19,8 +19,8 @@ interface DataTableProps<T> {
   columns: { key: keyof T; label: string }[]
   renderCell: (item: T, columnKey: keyof T) => ReactNode
   toFilter: keyof T
-  populateComponent: ReactNode
-  createComponent: ReactNode
+  populateComponent?: ReactNode
+  createComponent?: ReactNode
 }
 
 const DataTable = <T extends { id: number }>({

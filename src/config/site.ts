@@ -15,8 +15,8 @@ export const siteConfig = {
       href: '/room',
     },
     {
-      label: 'Users',
-      href: '/users',
+      label: 'Guests',
+      href: '/guests',
     },
     {
       label: 'Settings',
@@ -41,8 +41,8 @@ export const siteConfig = {
       href: '/room',
     },
     {
-      label: 'Users',
-      href: '/users',
+      label: 'Guests',
+      href: '/guests',
     },
     {
       label: 'Settings',
@@ -54,6 +54,7 @@ export const siteConfig = {
     },
   ],
   queryKey: {
+    guests: 'guests',
     rooms: 'rooms',
     lastRoom: 'last_room',
     settings: 'settings',

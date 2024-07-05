@@ -4,9 +4,9 @@ import DefaultLayout from './layout'
 
 import Bookings from '@/pages/bookings'
 import Dashboard from '@/pages/dashboard'
+import GuestList from '@/pages/guest/list'
 import RoomList from '@/pages/room/list'
 import Settings from '@/pages/settings'
-import Users from '@/pages/users'
 
 const App = () => {
   return (
@@ -25,7 +25,7 @@ const App = () => {
           <Route index element={<Navigate replace to="list" />} />
           <Route element={<RoomList />} path="list" />
         </Route>
-        <Route element={<Users />} path="/users" />
+        <Route element={<GuestList />} path="/guests" />
         <Route element={<Settings />} path="/settings" />
       </Route>
     </Routes>
