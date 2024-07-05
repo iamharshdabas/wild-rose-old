@@ -8,6 +8,8 @@ import GuestList from '@/pages/guest/list'
 import RoomList from '@/pages/room/list'
 import Settings from '@/pages/settings'
 
+// PERF: make api, hooks and types DRY.
+
 const App = () => {
   return (
     <Routes>
