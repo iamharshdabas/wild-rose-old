@@ -1,4 +1,4 @@
-import supabase from '@/config/supabase'
+import supabase from '@/utils/supabase'
 import { RoomCreateProps } from '@/types/room'
 
 const createRoom = async (room: RoomCreateProps[]) => {

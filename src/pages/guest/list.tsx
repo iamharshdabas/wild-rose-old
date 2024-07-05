@@ -8,7 +8,7 @@ import { Copy } from 'lucide-react'
 import GuestPopulate from './populate'
 import GuestShow from './show'
 
-import { subtitle, title } from '@/config/primitives'
+import { subtitle, title } from '@/utils/primitives'
 import formatDate from '@/utils/formatDate'
 import DataTable from '@/components/data-table'
 import useGetGuestsQuery from '@/hooks/guests/useGetGuestsQuery'

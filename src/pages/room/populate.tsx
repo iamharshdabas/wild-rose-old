@@ -18,9 +18,9 @@ import incrementNumber from '@/utils/incrementNumber'
 import getRandomPrice from '@/utils/getRandomPrice'
 import getRandomImage from '@/utils/getRandomImage'
 import { RoomCreateProps } from '@/types/room'
-import { siteConfig } from '@/config/site'
+import { siteConfig } from '@/utils/site'
 import useCreateRoomMutation from '@/hooks/rooms/useCreateRoomMutation'
-import { subtitle } from '@/config/primitives'
+import { subtitle } from '@/utils/primitives'
 import useGetSettingsQuery from '@/hooks/settings/useGetSettingsQuery'
 
 interface PopulateRoomProps {

@@ -6,9 +6,9 @@ import { useQueryClient } from '@tanstack/react-query'
 import { Button } from '@nextui-org/button'
 import { House, IndianRupee } from 'lucide-react'
 
-import { title } from '@/config/primitives'
+import { title } from '@/utils/primitives'
 import { SettingsProps } from '@/types/settings'
-import { siteConfig } from '@/config/site'
+import { siteConfig } from '@/utils/site'
 import useGetSettingsQuery from '@/hooks/settings/useGetSettingsQuery'
 import useUpdateSettingsMutation from '@/hooks/settings/useUpdateSettingsMutation'
 

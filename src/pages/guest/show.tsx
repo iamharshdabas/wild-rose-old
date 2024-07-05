@@ -13,7 +13,7 @@ import { cn } from '@nextui-org/theme'
 import { Code } from '@nextui-org/code'
 
 import useGetGuestQuery from '@/hooks/guests/useGetGuestQuery'
-import { title } from '@/config/primitives'
+import { title } from '@/utils/primitives'
 import calculateAge from '@/utils/calculateAge'
 
 const GuestShow = ({ id }: { id: number }) => {

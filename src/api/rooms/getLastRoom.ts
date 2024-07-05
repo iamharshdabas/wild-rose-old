@@ -1,4 +1,4 @@
-import supabase from '@/config/supabase'
+import supabase from '@/utils/supabase'
 import { RoomProps } from '@/types/room'
 
 const getLastRoom = async (): Promise<RoomProps> => {

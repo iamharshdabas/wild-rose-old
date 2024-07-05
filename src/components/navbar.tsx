@@ -13,7 +13,7 @@ import { NavLink } from 'react-router-dom'
 import { useState } from 'react'
 import { Tent } from 'lucide-react'
 
-import { siteConfig } from '@/config/site'
+import { siteConfig } from '@/utils/site'
 import { ThemeSwitch } from '@/components/theme-switch'
 
 export const Navbar = () => {

@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { siteConfig } from '@/config/site'
+import { siteConfig } from '@/utils/site'
 import getGuests from '@/api/guests/getGuests'
 
 const useGetGuestsQuery = () => {

@@ -22,7 +22,7 @@ import getRandomImage from '@/utils/getRandomImage'
 import { RoomCreateProps } from '@/types/room'
 import useGetLastRoomQuery from '@/hooks/rooms/useGetLastRoomQuery'
 import useCreateRoomMutation from '@/hooks/rooms/useCreateRoomMutation'
-import { siteConfig } from '@/config/site'
+import { siteConfig } from '@/utils/site'
 import useGetSettingsQuery from '@/hooks/settings/useGetSettingsQuery'
 
 const RoomCreate = () => {

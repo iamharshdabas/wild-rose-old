@@ -1,4 +1,4 @@
-import supabase from '@/config/supabase'
+import supabase from '@/utils/supabase'
 import { GuestCreateProps } from '@/types/guest'
 
 const createGuests = async (guest: GuestCreateProps[]) => {

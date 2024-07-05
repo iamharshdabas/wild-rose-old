@@ -1,4 +1,4 @@
-import supabase from '@/config/supabase'
+import supabase from '@/utils/supabase'
 import { GuestProps } from '@/types/guest'
 
 const getGuest = async (id: number): Promise<GuestProps> => {

@@ -1,4 +1,4 @@
-import supabase from '@/config/supabase'
+import supabase from '@/utils/supabase'
 import { SettingsProps } from '@/types/settings'
 
 const updateSettings = async (settings: SettingsProps) => {

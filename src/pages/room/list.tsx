@@ -21,10 +21,10 @@ import RoomPopulate from './populate'
 import RoomCreate from './create'
 
 import { RoomColumnProps, RoomProps } from '@/types/room'
-import { subtitle, title } from '@/config/primitives'
+import { subtitle, title } from '@/utils/primitives'
 import useGetRoomsQuery from '@/hooks/rooms/useGetRoomsQuery'
 import useDeleteRoomMutation from '@/hooks/rooms/useDeleteRoomMutation'
-import { siteConfig } from '@/config/site'
+import { siteConfig } from '@/utils/site'
 import formatDate from '@/utils/formatDate'
 import DataTable from '@/components/data-table'
 

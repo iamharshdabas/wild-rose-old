@@ -1,4 +1,4 @@
-import supabase from '@/config/supabase'
+import supabase from '@/utils/supabase'
 
 const deleteRooms = async (id: number) => {
   const { data, error } = await supabase.from('rooms').delete().eq('id', id)

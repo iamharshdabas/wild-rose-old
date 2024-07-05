@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 
 import getLastRoom from '@/api/rooms/getLastRoom'
-import { siteConfig } from '@/config/site'
+import { siteConfig } from '@/utils/site'
 
 const useGetLastRoomQuery = () => {
   const query = useQuery({

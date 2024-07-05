@@ -1,4 +1,4 @@
-import { title } from '@/config/primitives'
+import { title } from '@/utils/primitives'
 
 const Bookings = () => {
   return (

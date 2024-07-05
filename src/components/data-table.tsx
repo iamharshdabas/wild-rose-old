@@ -12,7 +12,7 @@ import { cn } from '@nextui-org/theme'
 import { ChangeEvent, ReactNode, useCallback, useMemo, useState } from 'react'
 import { Search } from 'lucide-react'
 
-import { subtitle } from '@/config/primitives'
+import { subtitle } from '@/utils/primitives'
 
 interface DataTableProps<T> {
   data: T[]

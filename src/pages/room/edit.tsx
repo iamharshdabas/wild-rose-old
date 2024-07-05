@@ -20,7 +20,7 @@ import useGetRoomQuery from '@/hooks/rooms/useGetRoomQuery'
 import { RoomCreateProps } from '@/types/room'
 import getRandomImage from '@/utils/getRandomImage'
 import useUpdateRoomMutation from '@/hooks/rooms/useUpdateRoomMutation'
-import { siteConfig } from '@/config/site'
+import { siteConfig } from '@/utils/site'
 import useGetSettingsQuery from '@/hooks/settings/useGetSettingsQuery'
 
 const RoomEdit = ({ id }: { id: number }) => {

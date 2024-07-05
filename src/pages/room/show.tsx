@@ -23,7 +23,7 @@ import {
   CarouselNext,
 } from '@/components/carousel'
 import formatDate from '@/utils/formatDate'
-import { title } from '@/config/primitives'
+import { title } from '@/utils/primitives'
 
 const RoomShow = ({ id }: { id: number }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()

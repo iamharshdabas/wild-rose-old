@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 
 import getRooms from '@/api/rooms/getRooms'
-import { siteConfig } from '@/config/site'
+import { siteConfig } from '@/utils/site'
 
 const useGetRoomsQuery = () => {
   const query = useQuery({

@@ -13,7 +13,7 @@ import { Controller, useForm } from 'react-hook-form'
 
 import useCreateGuestsMutation from '@/hooks/guests/useCreateGuestsMutation'
 import getRandomGuests from '@/api/guests/getRandomGuests'
-import { siteConfig } from '@/config/site'
+import { siteConfig } from '@/utils/site'
 
 interface PopulateGuestProps {
   totalGuests: number
