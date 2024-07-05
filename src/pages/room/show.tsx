@@ -32,7 +32,7 @@ const RoomShow = ({ id }: { id: number }) => {
 
   return (
     <>
-      <Button isIconOnly variant="light" onPress={onOpen}>
+      <Button isIconOnly color="primary" variant="light" onPress={onOpen}>
         <Eye />
       </Button>
       {/* scrollBehavior="outside" TODO: uncomment this when there are bookings are there */}
