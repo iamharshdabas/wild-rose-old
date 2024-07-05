@@ -34,7 +34,7 @@ const GuestPopulate = () => {
     reset,
     formState: { errors },
   } = useForm<PopulateGuestProps>({
-    defaultValues: { totalGuests: Math.floor(Math.random() * 10 + 1) },
+    defaultValues: { totalGuests: Math.ceil(Math.random() * 10) },
   })
 
   const onSubmit = async (data: PopulateGuestProps) => {
