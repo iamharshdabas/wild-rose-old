@@ -2,7 +2,7 @@ import { Navigate, Outlet, Route, Routes } from 'react-router-dom'
 
 import DefaultLayout from './layout'
 
-import Bookings from '@/pages/bookings'
+import BookingList from '@/pages/booking/list'
 import Dashboard from '@/pages/dashboard'
 import GuestList from '@/pages/guest/list'
 import RoomList from '@/pages/room/list'
@@ -22,7 +22,7 @@ const App = () => {
         }
       >
         <Route element={<Dashboard />} path="/dashboard" />
-        <Route element={<Bookings />} path="/bookings" />
+        <Route element={<BookingList />} path="/bookings" />
         <Route element={<Outlet />} path="/room">
           <Route index element={<Navigate replace to="list" />} />
           <Route element={<RoomList />} path="list" />

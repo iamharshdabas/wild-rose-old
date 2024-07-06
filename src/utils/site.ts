@@ -54,6 +54,7 @@ export const siteConfig = {
     },
   ],
   queryKey: {
+    bookings: 'bookings',
     guests: 'guests',
     rooms: 'rooms',
     lastRoom: 'last_room',

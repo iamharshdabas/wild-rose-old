@@ -1,39 +1,45 @@
 import { Button } from '@nextui-org/button'
 import { Code } from '@nextui-org/code'
+import { Image } from '@nextui-org/image'
 import {
   Modal,
-  ModalContent,
-  ModalHeader,
   ModalBody,
+  ModalContent,
   ModalFooter,
+  ModalHeader,
   useDisclosure,
 } from '@nextui-org/modal'
-import { Eye } from 'lucide-react'
 import { Spinner } from '@nextui-org/spinner'
-import { Image } from '@nextui-org/image'
+import { Eye, House } from 'lucide-react'
 
 import RoomEdit from './edit'
 
-import useGetRoomQuery from '@/hooks/rooms/useGetRoomQuery'
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselPrevious,
   CarouselNext,
+  CarouselPrevious,
 } from '@/components/carousel'
+import useGetRoomQuery from '@/hooks/rooms/useGetRoomQuery'
 import formatDate from '@/utils/formatDate'
-import { title } from '@/utils/primitives'
+import { title as nextUiTitle } from '@/utils/primitives'
 
-const RoomShow = ({ id }: { id: number }) => {
+const RoomShow = ({ id, title }: { id: number; title: string }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
   const { data: room, isLoading } = useGetRoomQuery(id)
 
   return (
     <>
-      <Button isIconOnly color="primary" variant="light" onPress={onOpen}>
-        <Eye />
+      <Button
+        color={title ? 'default' : 'primary'}
+        isIconOnly={!title}
+        startContent={title && <House size={16} />}
+        variant="light"
+        onPress={onOpen}
+      >
+        {title ? title : <Eye />}
       </Button>
       {/* scrollBehavior="outside" TODO: uncomment this when there are bookings are there */}
       <Modal isOpen={isOpen} size="3xl" onOpenChange={onOpenChange}>
@@ -80,8 +86,12 @@ const RoomShow = ({ id }: { id: number }) => {
                       </p>
                     </div>
                     <div className="flex justify-between gap-4">
-                      <h1 className={title({ size: 'sm' })}>{room?.name}</h1>
-                      <h1 className={title({ size: 'sm' })}>₹{room?.price}</h1>
+                      <h1 className={nextUiTitle({ size: 'sm' })}>
+                        {room?.name}
+                      </h1>
+                      <h1 className={nextUiTitle({ size: 'sm' })}>
+                        ₹{room?.price}
+                      </h1>
                     </div>
                     <div className="flex items-center justify-center rounded-2xl p-4">
                       {/* TODO: implement this */}

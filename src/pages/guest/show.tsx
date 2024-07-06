@@ -1,30 +1,35 @@
 import { Button } from '@nextui-org/button'
+import { Code } from '@nextui-org/code'
 import {
   Modal,
-  ModalContent,
-  ModalHeader,
   ModalBody,
+  ModalContent,
   ModalFooter,
+  ModalHeader,
   useDisclosure,
 } from '@nextui-org/modal'
-import { Eye } from 'lucide-react'
 import { Spinner } from '@nextui-org/spinner'
 import { cn } from '@nextui-org/theme'
-import { Code } from '@nextui-org/code'
+import { Eye } from 'lucide-react'
 
 import useGetGuestQuery from '@/hooks/guests/useGetGuestQuery'
-import { title } from '@/utils/primitives'
 import calculateAge from '@/utils/calculateAge'
+import { title as nextUiTitle } from '@/utils/primitives'
 
-const GuestShow = ({ id }: { id: number }) => {
+const GuestShow = ({ id, title }: { id: number; title: string }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
   const { data: guest, isLoading } = useGetGuestQuery(id)
 
   return (
     <>
-      <Button isIconOnly color="primary" variant="light" onPress={onOpen}>
-        <Eye />
+      <Button
+        color={title ? 'default' : 'primary'}
+        isIconOnly={!title}
+        variant="light"
+        onPress={onOpen}
+      >
+        {title ? title : <Eye />}
       </Button>
       {/* scrollBehavior="outside" TODO: uncomment this when there are bookings are there */}
       <Modal isOpen={isOpen} size="3xl" onOpenChange={onOpenChange}>
@@ -38,7 +43,7 @@ const GuestShow = ({ id }: { id: number }) => {
                 ) : (
                   <div className="flex flex-col gap-4">
                     <div className="flex justify-between gap-4">
-                      <h1 className={cn(title({ size: 'sm' }))}>
+                      <h1 className={cn(nextUiTitle({ size: 'sm' }))}>
                         {guest?.name}
                       </h1>
                       <div>
