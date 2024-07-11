@@ -1,11 +1,7 @@
 import { GuestProps } from './guest'
 import { RoomProps } from './room'
 
-export type BookingStatusProps =
-  | 'unpaid'
-  | 'checked-in'
-  | 'checked-out'
-  | 'checked-out-due'
+export type BookingStatusProps = 'unpaid' | 'checked-in' | 'checked-out'
 
 export type BookingProps = {
   id: number

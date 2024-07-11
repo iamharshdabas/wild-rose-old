@@ -70,15 +70,10 @@ const BookingPopulate = () => {
         )
 
         let status: BookingStatusProps
-        const paid = Math.random() > 0.2 ? true : false
+        const paid = Math.random() > 0.1 ? true : false
 
         if (paid) {
-          status =
-            Math.random() > 0.4
-              ? 'checked-in'
-              : Math.random() > 0.2
-                ? 'checked-out'
-                : 'checked-out-due'
+          status = Math.random() > 0.4 ? 'checked-in' : 'checked-out'
         } else {
           status = 'unpaid'
         }

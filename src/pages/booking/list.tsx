@@ -95,13 +95,11 @@ const BookingList = () => {
             <div className="flex justify-center">
               <Chip
                 color={
-                  cellValue === 'checked-out-due'
-                    ? 'danger'
-                    : cellValue === 'checked-out'
-                      ? 'success'
-                      : cellValue === 'checked-in'
-                        ? 'primary'
-                        : 'warning'
+                  cellValue === 'checked-out'
+                    ? 'success'
+                    : cellValue === 'checked-in'
+                      ? 'primary'
+                      : 'warning'
                 }
                 size="lg"
                 variant="dot"
